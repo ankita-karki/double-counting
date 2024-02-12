@@ -1,0 +1,797 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<Document id="OriginalArea" xsi:schemaLocation="http://www.opengis.net/kml/2.2 http://schemas.opengis.net/kml/2.2.0/ogckml22.xsd http://www.google.com/kml/ext/2.2 http://code.google.com/apis/kml/schema/kml22gx.xsd">
+	<name>OriginalArea</name>
+	<Snippet maxLines="0"></Snippet>
+	<Style id="PolyStyle00">
+		<LabelStyle>
+			<color>00000000</color>
+			<scale>0</scale>
+		</LabelStyle>
+		<LineStyle>
+			<color>ff6e6e6e</color>
+			<width>0.4</width>
+		</LineStyle>
+		<PolyStyle>
+			<color>fff7cbef</color>
+		</PolyStyle>
+	</Style>
+	<Folder id="FeatureLayer0">
+		<name>OriginalArea</name>
+		<Snippet maxLines="0"></Snippet>
+		<Placemark id="ID_00000">
+			<name>Bosques siempreverdes y semisiempreverdes de latifoliadas</name>
+			<Snippet maxLines="0"></Snippet>
+			<description><![CDATA[<html xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
+
+<head>
+
+<META http-equiv="Content-Type" content="text/html">
+
+</head>
+
+<body style="margin:0px 0px 0px 0px;overflow:auto;background:#FFFFFF;">
+
+<table style="font-family:Arial,Verdana,Times;font-size:12px;text-align:left;width:100;border-collapse:collapse;padding:3px 3px 3px 3px">
+
+<tr style="text-align:center;font-weight:bold;background:#9CBCE2">
+
+<td>Bosques siempreverdes y semisiempreverdes de latifoliadas</td>
+
+</tr>
+
+<tr>
+
+<td>
+
+<table style="font-family:Arial,Verdana,Times;font-size:12px;text-align:left;width:100;border-spacing:0px; padding:3px 3px 3px 3px">
+
+<tr>
+
+<td>FID</td>
+
+<td>0</td>
+
+</tr>
+
+<tr bgcolor="#D4E4F3">
+
+<td>HECTARES</td>
+
+<td>404.123412</td>
+
+</tr>
+
+<tr>
+
+<td>DESCRIPCIO</td>
+
+<td>Bosques siempreverdes y semisiempreverdes de latifoliadas</td>
+
+</tr>
+
+<tr bgcolor="#D4E4F3">
+
+<td>DESCRIPTIO</td>
+
+<td>Evergreen and semi-evergreen broadleaf</td>
+
+</tr>
+
+<tr>
+
+<td>PARCEL_NAM</td>
+
+<td>Block 13 Parcel 6</td>
+
+</tr>
+
+</table>
+
+</td>
+
+</tr>
+
+</table>
+
+</body>
+
+</html>]]></description>
+			<styleUrl>#PolyStyle00</styleUrl>
+			<MultiGeometry>
+				<Polygon>
+					<outerBoundaryIs>
+						<LinearRing>
+							<coordinates>
+								-88.77855,17.799328,0 -88.77918200000001,17.799248,0 -88.77937300000001,17.801271,0 -88.780479,17.803366,0 -88.780598,17.805747,0 -88.78498500000001,17.797349,0 -88.792374,17.800893,0 -88.792513,17.800959,0 -88.792512,17.800827,0 -88.792492,17.798827,0 -88.792,17.797646,0 -88.79199199999999,17.795713,0 -88.792084,17.795326,0 -88.792444,17.794019,0 -88.792406,17.79021,0 -88.792236,17.787405,0 -88.792348,17.78429,0 -88.79225599999999,17.775111,0 -88.791222,17.774239,0 -88.788811,17.772333,0 -88.78787199999999,17.774635,0 -88.788185,17.776562,0 -88.789833,17.778749,0 -88.79022999999999,17.780401,0 -88.78919999999999,17.782337,0 -88.78756,17.78171,0 -88.78724699999999,17.778866,0 -88.786568,17.777863,0 -88.78454600000001,17.777239,0 -88.783852,17.775042,0 -88.782799,17.774683,0 -88.781738,17.774693,0 -88.78037999999999,17.772409,0 -88.779388,17.769571,0 -88.778363,17.77087,0 -88.778425,17.780318,0 -88.77855,17.799328,0 
+							</coordinates>
+						</LinearRing>
+					</outerBoundaryIs>
+				</Polygon>
+			</MultiGeometry>
+		</Placemark>
+		<Placemark id="ID_00001">
+			<name>Arbustales de latifoliadas</name>
+			<Snippet maxLines="0"></Snippet>
+			<description><![CDATA[<html xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
+
+<head>
+
+<META http-equiv="Content-Type" content="text/html">
+
+</head>
+
+<body style="margin:0px 0px 0px 0px;overflow:auto;background:#FFFFFF;">
+
+<table style="font-family:Arial,Verdana,Times;font-size:12px;text-align:left;width:100;border-collapse:collapse;padding:3px 3px 3px 3px">
+
+<tr style="text-align:center;font-weight:bold;background:#9CBCE2">
+
+<td>Arbustales de latifoliadas</td>
+
+</tr>
+
+<tr>
+
+<td>
+
+<table style="font-family:Arial,Verdana,Times;font-size:12px;text-align:left;width:100;border-spacing:0px; padding:3px 3px 3px 3px">
+
+<tr>
+
+<td>FID</td>
+
+<td>1</td>
+
+</tr>
+
+<tr bgcolor="#D4E4F3">
+
+<td>HECTARES</td>
+
+<td>933.774444</td>
+
+</tr>
+
+<tr>
+
+<td>DESCRIPCIO</td>
+
+<td>Arbustales de latifoliadas</td>
+
+</tr>
+
+<tr bgcolor="#D4E4F3">
+
+<td>DESCRIPTIO</td>
+
+<td>Broadleaf Shrubs</td>
+
+</tr>
+
+<tr>
+
+<td>PARCEL_NAM</td>
+
+<td>Block 13 Parcel 6</td>
+
+</tr>
+
+</table>
+
+</td>
+
+</tr>
+
+</table>
+
+</body>
+
+</html>]]></description>
+			<styleUrl>#PolyStyle00</styleUrl>
+			<MultiGeometry>
+				<Polygon>
+					<outerBoundaryIs>
+						<LinearRing>
+							<coordinates>
+								-88.778363,17.77087,0 -88.779388,17.769571,0 -88.78037999999999,17.772409,0 -88.781738,17.774693,0 -88.782799,17.774683,0 -88.783852,17.775042,0 -88.78454600000001,17.777239,0 -88.786568,17.777863,0 -88.78724699999999,17.778866,0 -88.78756,17.78171,0 -88.78919999999999,17.782337,0 -88.79022999999999,17.780401,0 -88.789833,17.778749,0 -88.788185,17.776562,0 -88.78787199999999,17.774635,0 -88.788811,17.772333,0 -88.791222,17.774239,0 -88.79225599999999,17.775111,0 -88.791872,17.736488,0 -88.789841,17.737286,0 -88.788033,17.736082,0 -88.78827699999999,17.733402,0 -88.78743,17.732147,0 -88.78621699999999,17.73101,0 -88.787415,17.730656,0 -88.78825399999999,17.730993,0 -88.78943599999999,17.729374,0 -88.789902,17.727764,0 -88.791782,17.727445,0 -88.791635,17.712637,0 -88.79070299999999,17.713228,0 -88.791405,17.710073,0 -88.79159799999999,17.708882,0 -88.791588,17.707862,0 -88.791374,17.707663,0 -88.791382,17.708008,0 -88.789726,17.710089,0 -88.787598,17.712976,0 -88.78510300000001,17.714952,0 -88.783546,17.714966,0 -88.783539,17.714506,0 -88.78388200000001,17.712896,0 -88.78636899999999,17.710119,0 -88.786827,17.708048,0 -88.786697,17.706902,0 -88.785858,17.706911,0 -88.783028,17.710953,0 -88.781746,17.714983,0 -88.781425,17.718199,0 -88.77975499999999,17.719477,0 -88.780136,17.721424,0 -88.78016700000001,17.724638,0 -88.782326,17.724619,0 -88.78282900000001,17.727484,0 -88.782875,17.731846,0 -88.780762,17.735882,0 -88.78125799999999,17.738287,0 -88.780312,17.7391,0 -88.77913700000001,17.741177,0 -88.778716,17.742165,0 -88.778341,17.767407,0 -88.778363,17.77087,0 
+							</coordinates>
+						</LinearRing>
+					</outerBoundaryIs>
+				</Polygon>
+				<Polygon>
+					<outerBoundaryIs>
+						<LinearRing>
+							<coordinates>
+								-88.791275,17.676388,0 -88.78816999999999,17.678261,0 -88.786293,17.680443,0 -88.785667,17.681053,0 -88.78568300000001,17.682524,0 -88.786598,17.683727,0 -88.788223,17.684319,0 -88.78913900000001,17.685522,0 -88.78861999999999,17.68795,0 -88.787643,17.689516,0 -88.788292,17.690981,0 -88.78836800000001,17.691053,0 -88.788315,17.691362,0 -88.788567,17.691586,0 -88.789551,17.69071,0 -88.791161,17.688879,0 -88.791394,17.688354,0 -88.791275,17.676388,0 
+							</coordinates>
+						</LinearRing>
+					</outerBoundaryIs>
+				</Polygon>
+				<Polygon>
+					<outerBoundaryIs>
+						<LinearRing>
+							<coordinates>
+								-88.791166,17.665388,0 -88.791084,17.66577,0 -88.789444,17.669687,0 -88.78993199999999,17.670946,0 -88.791217,17.670554,0 -88.791166,17.665388,0 
+							</coordinates>
+						</LinearRing>
+					</outerBoundaryIs>
+				</Polygon>
+				<Polygon>
+					<outerBoundaryIs>
+						<LinearRing>
+							<coordinates>
+								-88.791102,17.658968,0 -88.790672,17.660954,0 -88.791141,17.662945,0 -88.791102,17.658968,0 
+							</coordinates>
+						</LinearRing>
+					</outerBoundaryIs>
+				</Polygon>
+			</MultiGeometry>
+		</Placemark>
+		<Placemark id="ID_00002">
+			<name>Bosques siempreverdes y semisiempreverdes de latifoliadas</name>
+			<Snippet maxLines="0"></Snippet>
+			<description><![CDATA[<html xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
+
+<head>
+
+<META http-equiv="Content-Type" content="text/html">
+
+</head>
+
+<body style="margin:0px 0px 0px 0px;overflow:auto;background:#FFFFFF;">
+
+<table style="font-family:Arial,Verdana,Times;font-size:12px;text-align:left;width:100;border-collapse:collapse;padding:3px 3px 3px 3px">
+
+<tr style="text-align:center;font-weight:bold;background:#9CBCE2">
+
+<td>Bosques siempreverdes y semisiempreverdes de latifoliadas</td>
+
+</tr>
+
+<tr>
+
+<td>
+
+<table style="font-family:Arial,Verdana,Times;font-size:12px;text-align:left;width:100;border-spacing:0px; padding:3px 3px 3px 3px">
+
+<tr>
+
+<td>FID</td>
+
+<td>2</td>
+
+</tr>
+
+<tr bgcolor="#D4E4F3">
+
+<td>HECTARES</td>
+
+<td>2.380731</td>
+
+</tr>
+
+<tr>
+
+<td>DESCRIPCIO</td>
+
+<td>Bosques siempreverdes y semisiempreverdes de latifoliadas</td>
+
+</tr>
+
+<tr bgcolor="#D4E4F3">
+
+<td>DESCRIPTIO</td>
+
+<td>Evergreen and semi-evergreen broadleaf</td>
+
+</tr>
+
+<tr>
+
+<td>PARCEL_NAM</td>
+
+<td>Block 13 Parcel 6</td>
+
+</tr>
+
+</table>
+
+</td>
+
+</tr>
+
+</table>
+
+</body>
+
+</html>]]></description>
+			<styleUrl>#PolyStyle00</styleUrl>
+			<MultiGeometry>
+				<Polygon>
+					<outerBoundaryIs>
+						<LinearRing>
+							<coordinates>
+								-88.792444,17.794019,0 -88.792084,17.795326,0 -88.79199199999999,17.795713,0 -88.792,17.797646,0 -88.792492,17.798827,0 -88.792444,17.794019,0 
+							</coordinates>
+						</LinearRing>
+					</outerBoundaryIs>
+				</Polygon>
+				<Polygon>
+					<outerBoundaryIs>
+						<LinearRing>
+							<coordinates>
+								-88.792348,17.78429,0 -88.792236,17.787405,0 -88.792406,17.79021,0 -88.792348,17.78429,0 
+							</coordinates>
+						</LinearRing>
+					</outerBoundaryIs>
+				</Polygon>
+			</MultiGeometry>
+		</Placemark>
+		<Placemark id="ID_00003">
+			<name>Bosques siempreverdes y semisiempreverdes de latifoliadas</name>
+			<Snippet maxLines="0"></Snippet>
+			<description><![CDATA[<html xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
+
+<head>
+
+<META http-equiv="Content-Type" content="text/html">
+
+</head>
+
+<body style="margin:0px 0px 0px 0px;overflow:auto;background:#FFFFFF;">
+
+<table style="font-family:Arial,Verdana,Times;font-size:12px;text-align:left;width:100;border-collapse:collapse;padding:3px 3px 3px 3px">
+
+<tr style="text-align:center;font-weight:bold;background:#9CBCE2">
+
+<td>Bosques siempreverdes y semisiempreverdes de latifoliadas</td>
+
+</tr>
+
+<tr>
+
+<td>
+
+<table style="font-family:Arial,Verdana,Times;font-size:12px;text-align:left;width:100;border-spacing:0px; padding:3px 3px 3px 3px">
+
+<tr>
+
+<td>FID</td>
+
+<td>3</td>
+
+</tr>
+
+<tr bgcolor="#D4E4F3">
+
+<td>HECTARES</td>
+
+<td>3120.042274</td>
+
+</tr>
+
+<tr>
+
+<td>DESCRIPCIO</td>
+
+<td>Bosques siempreverdes y semisiempreverdes de latifoliadas</td>
+
+</tr>
+
+<tr bgcolor="#D4E4F3">
+
+<td>DESCRIPTIO</td>
+
+<td>Evergreen and semi-evergreen broadleaf</td>
+
+</tr>
+
+<tr>
+
+<td>PARCEL_NAM</td>
+
+<td>Block 13 Parcel 6</td>
+
+</tr>
+
+</table>
+
+</td>
+
+</tr>
+
+</table>
+
+</body>
+
+</html>]]></description>
+			<styleUrl>#PolyStyle00</styleUrl>
+			<MultiGeometry>
+				<Polygon>
+					<outerBoundaryIs>
+						<LinearRing>
+							<coordinates>
+								-88.75171899999999,17.697601,0 -88.752216,17.698248,0 -88.752903,17.699372,0 -88.75327799999999,17.699974,0 -88.753584,17.700493,0 -88.75380800000001,17.700828,0 -88.75411,17.70134,0 -88.754304,17.701808,0 -88.75456800000001,17.702131,0 -88.75489399999999,17.702589,0 -88.755116,17.703029,0 -88.755377,17.703416,0 -88.75617699999999,17.703553,0 -88.75687000000001,17.703656,0 -88.757426,17.703759,0 -88.757611,17.703793,0 -88.758341,17.703968,0 -88.759118,17.704114,0 -88.7598,17.704289,0 -88.760875,17.704496,0 -88.76196299999999,17.704703,0 -88.762514,17.704933,0 -88.763351,17.705097,0 -88.764081,17.70529,0 -88.764608,17.705484,0 -88.765444,17.705612,0 -88.76603,17.70576,0 -88.766638,17.705881,0 -88.76685500000001,17.705924,0 -88.767453,17.706109,0 -88.767717,17.706432,0 -88.768102,17.706835,0 -88.76830699999999,17.707086,0 -88.768584,17.707508,0 -88.76871800000001,17.707778,0 -88.76897099999999,17.708264,0 -88.76920200000001,17.708795,0 -88.76924,17.709255,0 -88.769351,17.709706,0 -88.769701,17.710335,0 -88.76989500000001,17.710876,0 -88.770077,17.711272,0 -88.770295,17.711713,0 -88.77061999999999,17.712053,0 -88.770956,17.712339,0 -88.771641,17.713011,0 -88.771727,17.713085,0 -88.772374,17.713646,0 -88.77278200000001,17.713994,0 -88.773262,17.71446,0 -88.773791,17.714898,0 -88.77440199999999,17.71548,0 -88.774776,17.716,0 -88.775317,17.716547,0 -88.775774,17.717012,0 -88.77633899999999,17.717576,0 -88.776737,17.718061,0 -88.777289,17.718661,0 -88.77777,17.719118,0 -88.77812,17.719711,0 -88.778542,17.720367,0 -88.778772,17.720825,0 -88.778942,17.721285,0 -88.77878,17.737842,0 -88.778716,17.742165,0 -88.77913700000001,17.741177,0 -88.780312,17.7391,0 -88.78125799999999,17.738287,0 -88.780762,17.735882,0 -88.782875,17.731846,0 -88.78282900000001,17.727484,0 -88.782326,17.724619,0 -88.78016700000001,17.724638,0 -88.780136,17.721424,0 -88.77975499999999,17.719477,0 -88.781425,17.718199,0 -88.781746,17.714983,0 -88.783028,17.710953,0 -88.785858,17.706911,0 -88.786697,17.706902,0 -88.786827,17.708048,0 -88.78636899999999,17.710119,0 -88.78388200000001,17.712896,0 -88.783539,17.714506,0 -88.783546,17.714966,0 -88.78510300000001,17.714952,0 -88.787598,17.712976,0 -88.789726,17.710089,0 -88.791382,17.708008,0 -88.791374,17.707663,0 -88.791588,17.707862,0 -88.791478,17.696846,0 -88.789978,17.697371,0 -88.78900899999999,17.699196,0 -88.78775,17.699814,0 -88.78569,17.701597,0 -88.785599,17.701391,0 -88.78497299999999,17.701017,0 -88.78433200000001,17.701523,0 -88.784485,17.697123,0 -88.787674,17.693188,0 -88.788315,17.693491,0 -88.787102,17.698002,0 -88.788696,17.69496,0 -88.79057299999999,17.693731,0 -88.791432,17.692222,0 -88.791394,17.688354,0 -88.791161,17.688879,0 -88.789551,17.69071,0 -88.788567,17.691586,0 -88.788315,17.691362,0 -88.78836800000001,17.691053,0 -88.788292,17.690981,0 -88.787643,17.689516,0 -88.78861999999999,17.68795,0 -88.78913900000001,17.685522,0 -88.788223,17.684319,0 -88.786598,17.683727,0 -88.78568300000001,17.682524,0 -88.785667,17.681053,0 -88.786293,17.680443,0 -88.78816999999999,17.678261,0 -88.791275,17.676388,0 -88.791217,17.670554,0 -88.78993199999999,17.670946,0 -88.789444,17.669687,0 -88.791084,17.66577,0 -88.791166,17.665388,0 -88.791141,17.662945,0 -88.790672,17.660954,0 -88.791102,17.658968,0 -88.791087,17.657501,0 -88.79107999999999,17.65681,0 -88.79091099999999,17.63874,0 -88.781479,17.638825,0 -88.781462,17.637018,0 -88.780519,17.637027,0 -88.780494,17.63448,0 -88.762484,17.634642,0 -88.76281,17.657065,0 -88.76289800000001,17.6661,0 -88.741044,17.666295,0 -88.74099099999999,17.667073,0 -88.74099699999999,17.667698,0 -88.740976,17.668196,0 -88.741034,17.668869,0 -88.741067,17.669542,0 -88.74109,17.669926,0 -88.74111000000001,17.670052,0 -88.74115500000001,17.670377,0 -88.741213,17.670602,0 -88.741331,17.670936,0 -88.741496,17.67135,0 -88.741649,17.671764,0 -88.74181299999999,17.67216,0 -88.742026,17.672583,0 -88.742227,17.672925,0 -88.74249500000001,17.67326,0 -88.742119,17.669207,0 -88.74572000000001,17.673044,0 -88.74951900000001,17.674164,0 -88.745676,17.675191,0 -88.74595100000001,17.675232,0 -88.746562,17.675299,0 -88.747041,17.675439,0 -88.74737500000001,17.675581,0 -88.74753,17.675706,0 -88.747612,17.675967,0 -88.747658,17.676265,0 -88.747726,17.676798,0 -88.74774499999999,17.677403,0 -88.747837,17.677587,0 -88.747838,17.677605,0 -88.752083,17.677607,0 -88.75256299999999,17.681086,0 -88.74803199999999,17.681707,0 -88.74807699999999,17.682614,0 -88.74816199999999,17.684312,0 -88.75048099999999,17.685286,0 -88.749763,17.690325,0 -88.748558,17.690421,0 -88.74856800000001,17.690516,0 -88.748565,17.690977,0 -88.748549,17.691483,0 -88.748558,17.691835,0 -88.748554,17.692332,0 -88.748633,17.692964,0 -88.748738,17.693388,0 -88.748988,17.693665,0 -88.749334,17.693952,0 -88.749334,17.693952,0 -88.752197,17.694166,0 -88.75171899999999,17.697601,0 
+							</coordinates>
+						</LinearRing>
+					</outerBoundaryIs>
+				</Polygon>
+				<Polygon>
+					<outerBoundaryIs>
+						<LinearRing>
+							<coordinates>
+								-88.79159799999999,17.708882,0 -88.791405,17.710073,0 -88.79070299999999,17.713228,0 -88.791635,17.712637,0 -88.79159799999999,17.708882,0 
+							</coordinates>
+						</LinearRing>
+					</outerBoundaryIs>
+				</Polygon>
+			</MultiGeometry>
+		</Placemark>
+		<Placemark id="ID_00004">
+			<name>Bosques siempreverdes y semisiempreverdes de latifoliadas</name>
+			<Snippet maxLines="0"></Snippet>
+			<description><![CDATA[<html xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
+
+<head>
+
+<META http-equiv="Content-Type" content="text/html">
+
+</head>
+
+<body style="margin:0px 0px 0px 0px;overflow:auto;background:#FFFFFF;">
+
+<table style="font-family:Arial,Verdana,Times;font-size:12px;text-align:left;width:100;border-collapse:collapse;padding:3px 3px 3px 3px">
+
+<tr style="text-align:center;font-weight:bold;background:#9CBCE2">
+
+<td>Bosques siempreverdes y semisiempreverdes de latifoliadas</td>
+
+</tr>
+
+<tr>
+
+<td>
+
+<table style="font-family:Arial,Verdana,Times;font-size:12px;text-align:left;width:100;border-spacing:0px; padding:3px 3px 3px 3px">
+
+<tr>
+
+<td>FID</td>
+
+<td>4</td>
+
+</tr>
+
+<tr bgcolor="#D4E4F3">
+
+<td>HECTARES</td>
+
+<td>37.885614</td>
+
+</tr>
+
+<tr>
+
+<td>DESCRIPCIO</td>
+
+<td>Bosques siempreverdes y semisiempreverdes de latifoliadas</td>
+
+</tr>
+
+<tr bgcolor="#D4E4F3">
+
+<td>DESCRIPTIO</td>
+
+<td>Evergreen and semi-evergreen broadleaf</td>
+
+</tr>
+
+<tr>
+
+<td>PARCEL_NAM</td>
+
+<td>Block 13 Parcel 6</td>
+
+</tr>
+
+</table>
+
+</td>
+
+</tr>
+
+</table>
+
+</body>
+
+</html>]]></description>
+			<styleUrl>#PolyStyle00</styleUrl>
+			<MultiGeometry>
+				<Polygon>
+					<outerBoundaryIs>
+						<LinearRing>
+							<coordinates>
+								-88.791782,17.727445,0 -88.789902,17.727764,0 -88.78943599999999,17.729374,0 -88.78825399999999,17.730993,0 -88.787415,17.730656,0 -88.78621699999999,17.73101,0 -88.78743,17.732147,0 -88.78827699999999,17.733402,0 -88.788033,17.736082,0 -88.789841,17.737286,0 -88.791872,17.736488,0 -88.791782,17.727445,0 
+							</coordinates>
+						</LinearRing>
+					</outerBoundaryIs>
+				</Polygon>
+			</MultiGeometry>
+		</Placemark>
+		<Placemark id="ID_00005">
+			<name>Bosques siempreverdes y semisiempreverdes de latifoliadas</name>
+			<Snippet maxLines="0"></Snippet>
+			<description><![CDATA[<html xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
+
+<head>
+
+<META http-equiv="Content-Type" content="text/html">
+
+</head>
+
+<body style="margin:0px 0px 0px 0px;overflow:auto;background:#FFFFFF;">
+
+<table style="font-family:Arial,Verdana,Times;font-size:12px;text-align:left;width:100;border-collapse:collapse;padding:3px 3px 3px 3px">
+
+<tr style="text-align:center;font-weight:bold;background:#9CBCE2">
+
+<td>Bosques siempreverdes y semisiempreverdes de latifoliadas</td>
+
+</tr>
+
+<tr>
+
+<td>
+
+<table style="font-family:Arial,Verdana,Times;font-size:12px;text-align:left;width:100;border-spacing:0px; padding:3px 3px 3px 3px">
+
+<tr>
+
+<td>FID</td>
+
+<td>5</td>
+
+</tr>
+
+<tr bgcolor="#D4E4F3">
+
+<td>HECTARES</td>
+
+<td>797.039026</td>
+
+</tr>
+
+<tr>
+
+<td>DESCRIPCIO</td>
+
+<td>Bosques siempreverdes y semisiempreverdes de latifoliadas</td>
+
+</tr>
+
+<tr bgcolor="#D4E4F3">
+
+<td>DESCRIPTIO</td>
+
+<td>Evergreen and semi-evergreen broadleaf</td>
+
+</tr>
+
+<tr>
+
+<td>PARCEL_NAM</td>
+
+<td>Block 13 Parcel 6</td>
+
+</tr>
+
+</table>
+
+</td>
+
+</tr>
+
+</table>
+
+</body>
+
+</html>]]></description>
+			<styleUrl>#PolyStyle00</styleUrl>
+			<MultiGeometry>
+				<Polygon>
+					<outerBoundaryIs>
+						<LinearRing>
+							<coordinates>
+								-88.762484,17.634642,0 -88.780494,17.63448,0 -88.780519,17.637027,0 -88.781462,17.637018,0 -88.781479,17.638825,0 -88.79091099999999,17.63874,0 -88.79083,17.629705,0 -88.790671,17.611899,0 -88.790637,17.611899,0 -88.76554400000001,17.612179,0 -88.76228399999999,17.61399,0 -88.762416,17.629961,0 -88.762466,17.633392,0 -88.76246999999999,17.633673,0 -88.762472,17.633771,0 -88.762484,17.634642,0 
+							</coordinates>
+						</LinearRing>
+					</outerBoundaryIs>
+				</Polygon>
+			</MultiGeometry>
+		</Placemark>
+		<Placemark id="ID_00006">
+			<name>Bosques siempreverdes y semisiempreverdes de latifoliadas</name>
+			<Snippet maxLines="0"></Snippet>
+			<description><![CDATA[<html xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
+
+<head>
+
+<META http-equiv="Content-Type" content="text/html">
+
+</head>
+
+<body style="margin:0px 0px 0px 0px;overflow:auto;background:#FFFFFF;">
+
+<table style="font-family:Arial,Verdana,Times;font-size:12px;text-align:left;width:100;border-collapse:collapse;padding:3px 3px 3px 3px">
+
+<tr style="text-align:center;font-weight:bold;background:#9CBCE2">
+
+<td>Bosques siempreverdes y semisiempreverdes de latifoliadas</td>
+
+</tr>
+
+<tr>
+
+<td>
+
+<table style="font-family:Arial,Verdana,Times;font-size:12px;text-align:left;width:100;border-spacing:0px; padding:3px 3px 3px 3px">
+
+<tr>
+
+<td>FID</td>
+
+<td>6</td>
+
+</tr>
+
+<tr bgcolor="#D4E4F3">
+
+<td>HECTARES</td>
+
+<td>3.414063</td>
+
+</tr>
+
+<tr>
+
+<td>DESCRIPCIO</td>
+
+<td>Bosques siempreverdes y semisiempreverdes de latifoliadas</td>
+
+</tr>
+
+<tr bgcolor="#D4E4F3">
+
+<td>DESCRIPTIO</td>
+
+<td>Evergreen and semi-evergreen broadleaf</td>
+
+</tr>
+
+<tr>
+
+<td>PARCEL_NAM</td>
+
+<td>Block 13 Parcel 6</td>
+
+</tr>
+
+</table>
+
+</td>
+
+</tr>
+
+</table>
+
+</body>
+
+</html>]]></description>
+			<styleUrl>#PolyStyle00</styleUrl>
+			<MultiGeometry>
+				<Polygon>
+					<outerBoundaryIs>
+						<LinearRing>
+							<coordinates>
+								-88.76554400000001,17.612179,0 -88.76227,17.612216,0 -88.76228399999999,17.61399,0 -88.76554400000001,17.612179,0 
+							</coordinates>
+						</LinearRing>
+					</outerBoundaryIs>
+				</Polygon>
+			</MultiGeometry>
+		</Placemark>
+		<Placemark id="ID_00007">
+			<name>Bosques siempreverdes y semisiempreverdes de latifoliadas</name>
+			<Snippet maxLines="0"></Snippet>
+			<description><![CDATA[<html xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
+
+<head>
+
+<META http-equiv="Content-Type" content="text/html">
+
+</head>
+
+<body style="margin:0px 0px 0px 0px;overflow:auto;background:#FFFFFF;">
+
+<table style="font-family:Arial,Verdana,Times;font-size:12px;text-align:left;width:100;border-collapse:collapse;padding:3px 3px 3px 3px">
+
+<tr style="text-align:center;font-weight:bold;background:#9CBCE2">
+
+<td>Bosques siempreverdes y semisiempreverdes de latifoliadas</td>
+
+</tr>
+
+<tr>
+
+<td>
+
+<table style="font-family:Arial,Verdana,Times;font-size:12px;text-align:left;width:100;border-spacing:0px; padding:3px 3px 3px 3px">
+
+<tr>
+
+<td>FID</td>
+
+<td>7</td>
+
+</tr>
+
+<tr bgcolor="#D4E4F3">
+
+<td>HECTARES</td>
+
+<td>996.968054</td>
+
+</tr>
+
+<tr>
+
+<td>DESCRIPCIO</td>
+
+<td>Bosques siempreverdes y semisiempreverdes de latifoliadas</td>
+
+</tr>
+
+<tr bgcolor="#D4E4F3">
+
+<td>DESCRIPTIO</td>
+
+<td>Evergreen and semi-evergreen broadleaf</td>
+
+</tr>
+
+<tr>
+
+<td>PARCEL_NAM</td>
+
+<td>Block 14 Parcel 3</td>
+
+</tr>
+
+</table>
+
+</td>
+
+</tr>
+
+</table>
+
+</body>
+
+</html>]]></description>
+			<styleUrl>#PolyStyle00</styleUrl>
+			<MultiGeometry>
+				<Polygon>
+					<outerBoundaryIs>
+						<LinearRing>
+							<coordinates>
+								-88.799162,17.521181,0 -88.799541,17.559598,0 -88.799634,17.56899,0 -88.801007,17.568571,0 -88.81235700000001,17.565044,0 -88.813036,17.564911,0 -88.81378599999999,17.564696,0 -88.81431000000001,17.564502,0 -88.814751,17.564299,0 -88.815226,17.564168,0 -88.81584599999999,17.564018,0 -88.816287,17.563914,0 -88.816979,17.563872,0 -88.817408,17.563994,0 -88.817804,17.564208,0 -88.81819900000001,17.564367,0 -88.81841799999999,17.564395,0 -88.81798499999999,17.521009,0 -88.799162,17.521181,0 
+							</coordinates>
+						</LinearRing>
+					</outerBoundaryIs>
+				</Polygon>
+			</MultiGeometry>
+		</Placemark>
+	</Folder>
+</Document>
+</kml>

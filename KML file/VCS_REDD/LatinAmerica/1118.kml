@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<Document id="TI_Sete_setembro_20s">
+	<name>TI_Sete_setembro_20s</name>
+	<visibility>0</visibility>
+	<Snippet maxLines="0"></Snippet>
+	<Style id="PolyStyle00">
+		<LabelStyle>
+			<color>00000000</color>
+			<scale>0</scale>
+		</LabelStyle>
+		<LineStyle>
+			<color>ff00aaff</color>
+			<width>2</width>
+		</LineStyle>
+		<PolyStyle>
+			<color>00ffffff</color>
+		</PolyStyle>
+	</Style>
+	<Folder id="FeatureLayer0">
+		<name>TI_Sete_setembro_20s</name>
+		<visibility>0</visibility>
+		<Snippet maxLines="0"></Snippet>
+		<Placemark>
+			<name>Cacoal</name>
+			<visibility>0</visibility>
+			<Snippet maxLines="0"></Snippet>
+			<styleUrl>#PolyStyle00</styleUrl>
+			<MultiGeometry>
+				<Polygon>
+					<tessellate>1</tessellate>
+					<outerBoundaryIs>
+						<LinearRing>
+							<coordinates>
+								-61.149548,-11.24849,0 -61.31452,-11.249769,0 -61.314855,-11.114127,0 -61.425128,-11.114489,0 -61.430825,-10.751899,0 -60.953294,-10.739242,0 -60.929065,-10.738599,0 -60.924472,-10.938183,0 -60.92407399999999,-10.955512,0 -61.149548,-11.24849,0 
+							</coordinates>
+						</LinearRing>
+					</outerBoundaryIs>
+				</Polygon>
+			</MultiGeometry>
+		</Placemark>
+	</Folder>
+</Document>
+</kml>
