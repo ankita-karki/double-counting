@@ -5,12 +5,13 @@ install.packages("leaflet")
 install.packages("ggplot2")
 install.packages("mapview")
 
-#Loading the libraries
+#Loading the library 
 library(sf)
 library(dplyr)
 library(leaflet)
 library(ggplot2)
 library(mapview)
+library(sp)
 
 #Creating function to read and validate geometries 
 read_and_make_valid <- function(file) {
@@ -28,18 +29,19 @@ read_and_make_valid <- function(file) {
 }
 
 #Reading the KML files
-cookstove_files <- list.files(path = "./KML file/VCS_COOKSTOVE/Africa", pattern = "\\.kml$", full.names = TRUE)
-redd_files <- list.files(path = "./KML file/VCS_REDD/Africa", pattern = "\\.kml$", full.names = TRUE)
+cookstove_files <- list.files(path = "./KML file/GS_COOKSTOVE_NEW/Asia", pattern = "\\.kml$", full.names = TRUE)
+redd_files <- list.files(path = "./KML file/VCS_REDD/Asia", pattern = "\\.kml$", full.names = TRUE)
 
 #Creating list of sf object for cookstove and REDD
 cookstove_sf_list <- lapply(cookstove_files, read_and_make_valid)
 redd_sf_list <- lapply(redd_files, read_and_make_valid)
 
+###########################
 #Transforming all geometries to a common CRS (WGS 84)
 cookstove_sf_list <- lapply(cookstove_sf_list, function(sf) st_transform(sf, 4326))
 redd_sf_list <- lapply(redd_sf_list, function(sf) st_transform(sf, 4326))
 
-###########################
+
 #Convert polygon to multipolygon 
 #For REDD+ project
 redd_sf <- function(redd_sf_list) {
@@ -66,10 +68,10 @@ cookstove_sf <- function(cookstove_sf_list) {
 
 # Apply the conversion to all sf objects
 cookstove_sf_list <- lapply(cookstove_sf_list, cookstove_sf)
-###################################################
+
+###########################################
 
 ##1. Overlapping analysis using loop 
-
 # Initialize an empty list to store indices of cookstove geometries that overlap with REDD geometries
 overlap_indices <- list()
 
@@ -154,3 +156,5 @@ leaflet() %>%
 
 
 ##################################################
+
+
