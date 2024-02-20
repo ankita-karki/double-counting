@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://www.opengis.net/kml/2.2 http://schemas.opengis.net/kml/2.2.0/ogckml22.xsd http://www.google.com/kml/ext/2.2 http://code.google.com/apis/kml/schema/kml22gx.xsd">
+<Document id="Rukinga_bndry_area_WGS84">
+  <name>Rukinga_bndry_area_WGS84</name>
+  <Snippet></Snippet>
+  <Folder id="FeatureLayer0">
+    <name>Rukinga_bndry_area_WGS84</name>
+    <Snippet></Snippet>
+    <Placemark id="ID_00000">
+      <name>Rukinga</name>
+      <Snippet></Snippet>
+      <description><![CDATA[<html xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:msxsl="urn:schemas-microsoft-com:xslt">
+<head>
+<META http-equiv="Content-Type" content="text/html">
+</head>
+<body style="margin:0px 0px 0px 0px;overflow:auto;background:#FFFFFF;">
+<table style="font-family:Arial,Verdana,Times;font-size:12px;text-align:left;width:100;border-collapse:collapse;padding:3px 3px 3px 3px">
+<tr style="text-align:center;font-weight:bold;background:#9CBCE2">
+<td>Rukinga</td>
+</tr>
+<tr>
+<td>
+<table style="font-family:Arial,Verdana,Times;font-size:12px;text-align:left;width:100;border-spacing:0px; padding:3px 3px 3px 3px">
+<tr>
+<td>FID</td>
+<td>0</td>
+</tr>
+<tr bgcolor="#D4E4F3">
+<td>Id</td>
+<td>0</td>
+</tr>
+<tr>
+<td>FCO_Acres</td>
+<td>74548.091992</td>
+</tr>
+<tr bgcolor="#D4E4F3">
+<td>FCO_Ha</td>
+<td>30168.66316</td>
+</tr>
+<tr>
+<td>Ranch</td>
+<td>Rukinga</td>
+</tr>
+<tr bgcolor="#D4E4F3">
+<td>Perimeter</td>
+<td>84.053381</td>
+</tr>
+<tr>
+<td>Hectares</td>
+<td>30168.66316</td>
+</tr>
+<tr bgcolor="#D4E4F3">
+<td>Area</td>
+<td>301.686632</td>
+</tr>
+<tr>
+<td>Acres</td>
+<td>74548.390185</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</body>
+</html>
+]]></description>
+      <styleUrl>#PolyStyle00</styleUrl>
+      <MultiGeometry>
+        <Polygon>
+          <outerBoundaryIs><LinearRing><coordinates> 38.797610,-3.591500 38.782900,-3.619100 38.745500,-3.610300 38.718840,-3.681980 38.678110,-3.721650 38.778150,-3.876760 38.862930,-3.730120 38.832350,-3.707640 38.835800,-3.702500 38.780680,-3.657340 38.815620,-3.600810 38.797610,-3.591500</coordinates></LinearRing></outerBoundaryIs>
+        </Polygon>
+      </MultiGeometry>
+    </Placemark>
+  </Folder>
+  <Style id="PolyStyle00">
+    <LabelStyle>
+      <color>00000000</color>
+      <scale>0.000000</scale>
+    </LabelStyle>
+    <LineStyle>
+      <color>ff6e6e6e</color>
+      <width>0.400000</width>
+    </LineStyle>
+    <PolyStyle>
+      <color>ffc8dffa</color>
+      <outline>1</outline>
+    </PolyStyle>
+  </Style>
+</Document>
+</kml>
