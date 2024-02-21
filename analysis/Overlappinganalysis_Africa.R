@@ -52,9 +52,6 @@ redd_sf <- function(redd_sf_list) {
 # Apply the conversion to all sf objects
 redd_sf_list<- lapply(redd_sf_list, redd_sf)
 
-#For cookstove project 
-cookstove_sf_list <- lapply(cookstove_files, st_read)
-
 # Function to convert POLYGON to MULTIPOLYGON
 cookstove_sf <- function(cookstove_sf_list) {
   # Only convert POLYGONs to MULTIPOLYGONs, leave other geometry types as they are
