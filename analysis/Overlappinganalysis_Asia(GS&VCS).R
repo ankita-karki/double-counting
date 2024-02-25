@@ -10,8 +10,7 @@ library(sf)
 library(dplyr)
 library(leaflet)
 library(ggplot2)
-library(mapview)
-library(sp)
+
 
 #Creating function to read and validate geometries 
 read_and_make_valid <- function(file) {
@@ -29,8 +28,8 @@ read_and_make_valid <- function(file) {
 }
 
 #Reading the KML files
-cookstove_files <- list.files(path = "./KML file/GS_COOKSTOVE_NEW/Asia", pattern = "\\.kml$", full.names = TRUE)
-redd_files <- list.files(path = "./KML file/VCS_REDD/Asia", pattern = "\\.kml$", full.names = TRUE)
+cookstove_files <- list.files(path = "KML file/GS_COOKSTOVE_NEW/Asia", pattern = "\\.kml$", full.names = TRUE)
+redd_files <- list.files(path = "KML file/VCS_REDD/Asia", pattern = "\\.kml$", full.names = TRUE)
 
 #Creating list of sf object for cookstove and REDD
 cookstove_sf_list <- lapply(cookstove_files, read_and_make_valid)
@@ -72,31 +71,44 @@ cookstove_sf_list <- lapply(cookstove_sf_list, cookstove_sf)
 ###########################################
 
 ##1. Overlapping analysis using loop 
-# Initialize an empty list to store indices of cookstove geometries that overlap with REDD geometries
-overlap_indices <- list()
 
-# Loop through each cookstove sf object
-for (i in seq_along(cookstove_sf_list)) {
+# Initialize an empty list to store indices of REDD geometries that overlap with cookstove geometries
+overlap_indices_redd <- list()
+
+# Loop through each REDD sf object
+for (j in seq_along(redd_sf_list)) {
   
-  # Initialize a logical vector for overlap status of the current cookstove geometry
-  # Initially set all to FALSE (no overlap)
-  # Using nrow() to get the number of features in the sf object
-  overlaps_with_redd <- rep(FALSE, nrow(cookstove_sf_list[[i]]))
+  # Initialize a logical vector for overlap status of the current REDD geometry
+  overlaps_with_cookstove <- rep(FALSE, nrow(redd_sf_list[[j]]))
   
-  # Loop through each REDD sf object
-  for (j in seq_along(redd_sf_list)) {
+  # Loop through each cookstove sf object
+  for (i in seq_along(cookstove_sf_list)) {
     
     # Perform the overlap analysis
-    # TRUE if geometries overlap, FALSE otherwise
-    overlaps <- st_intersects(cookstove_sf_list[[i]], redd_sf_list[[j]], sparse = FALSE)
+    overlaps <- st_intersects(redd_sf_list[[j]], cookstove_sf_list[[i]], sparse = FALSE)
     
-    # Check which cookstove geometries have an overlap with any REDD geometry
-    overlaps_with_redd <- overlaps_with_redd | apply (overlaps, 1, any)
+    # Check which REDD geometries have an overlap with any cookstove geometry
+    overlaps_with_cookstove <- overlaps_with_cookstove | apply(overlaps, 1, any)
   }
   
-  # Store the indices of cookstove geometries that have an overlap with REDD geometries
-  overlap_indices[[i]] <- which(overlaps_with_redd)
+  # Store the indices of REDD geometries that have an overlap with cookstove geometries
+  overlap_indices_redd[[j]] <- which(overlaps_with_cookstove)
 }
+
+
+# Extract the overlapping REDD+ geometries into a new list of sf objects
+overlapping_geometries_redd_list <- lapply(seq_along(overlap_indices_redd), function(j) {
+  if (length(overlap_indices_redd[[j]]) > 0) {
+    redd_sf_list[[j]][overlap_indices_redd[[j]], ]
+  }
+})
+
+# Remove NULL elements if any exist due to no overlaps
+overlapping_geometries_redd_list <- Filter(Negate(is.null), overlapping_geometries_redd_list)
+
+# Combine all overlap sf objects into one sf object
+overlap_sf <- do.call(rbind, overlapping_geometries_redd_list)
+
 
 ##############################
 #2. Overlapping analysis using st_intersection
@@ -156,5 +168,12 @@ leaflet() %>%
 
 
 ##################################################
+#Saving file in geopackage format 
+# Specify the path to your folder and the filename
+overlap_Asia_VCS_GS <- "D:/Thesis/Version/25.02.2024/New folder/Overlap_Asia_VCS_GS.gpkg"
+
+# Save the sf object as a GeoPackage
+st_write(overlap_sf, overlap_Asia_VCS_GS, delete_layer = TRUE)
+
 
 
