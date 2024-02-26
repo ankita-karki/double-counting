@@ -24,12 +24,15 @@ read_and_make_valid <- function(file) {
   if ("XYM" %in% st_geometry_type(sf_obj) || "XYZM" %in% st_geometry_type(sf_obj)) {
     sf_obj <- st_zm(sf_obj, what = "M")
   }
+  
+  # Add the filename as a property of the sf object
+  sf_obj$filename <- basename(file)
   return(sf_obj)
 }
 
 #Reading the KML files
-cookstove_files <- list.files(path = "./KML file/VCS_COOKSTOVE/Africa", pattern = "\\.kml$", full.names = TRUE)
-redd_files <- list.files(path = "./KML file/VCS_REDD/Africa", pattern = "\\.kml$", full.names = TRUE)
+cookstove_files <- list.files(path = "KML file/GS_COOKSTOVE_NEW/Africa", pattern = "\\.kml$", full.names = TRUE)
+redd_files <- list.files(path = "KML file/VCS_REDD/Africa", pattern = "\\.kml$", full.names = TRUE)
 
 #Creating list of sf object for cookstove and REDD
 cookstove_sf_list <- lapply(cookstove_files, read_and_make_valid)
@@ -52,6 +55,7 @@ redd_sf <- function(redd_sf_list) {
 # Apply the conversion to all sf objects
 redd_sf_list<- lapply(redd_sf_list, redd_sf)
 
+
 # Function to convert POLYGON to MULTIPOLYGON
 cookstove_sf <- function(cookstove_sf_list) {
   # Only convert POLYGONs to MULTIPOLYGONs, leave other geometry types as they are
@@ -67,34 +71,44 @@ cookstove_sf_list <- lapply(cookstove_sf_list, cookstove_sf)
 
 ##1. Overlapping analysis using loop 
 
-# Initialize an empty list to store indices of cookstove geometries that overlap with REDD geometries
-overlap_indices <- list()
+# Initialize an empty list to store indices of REDD geometries that overlap with cookstove geometries
+overlap_indices_redd <- list()
 
-# Loop through each cookstove sf object
-for (i in seq_along(cookstove_sf_list)) {
+# Loop through each REDD sf object
+for (j in seq_along(redd_sf_list)) {
   
-  # Initialize a logical vector for overlap status of the current cookstove geometry
-  # Initially set all to FALSE (no overlap)
-  # Using nrow() to get the number of features in the sf object
-  overlaps_with_redd <- rep(FALSE, nrow(cookstove_sf_list[[i]]))
+  # Initialize a logical vector for overlap status of the current REDD geometry
+  overlaps_with_cookstove <- rep(FALSE, nrow(redd_sf_list[[j]]))
   
-  # Loop through each REDD sf object
-  for (j in seq_along(redd_sf_list)) {
+  # Loop through each cookstove sf object
+  for (i in seq_along(cookstove_sf_list)) {
     
     # Perform the overlap analysis
-    # TRUE if geometries overlap, FALSE otherwise
-    overlaps <- st_intersects(cookstove_sf_list[[i]], redd_sf_list[[j]], sparse = FALSE)
+    overlaps <- st_intersects(redd_sf_list[[j]], cookstove_sf_list[[i]], sparse = FALSE)
     
-    # Check which cookstove geometries have an overlap with any REDD geometry
-    overlaps_with_redd <- overlaps_with_redd | apply (overlaps, 1, any)
+    # Check which REDD geometries have an overlap with any cookstove geometry
+    overlaps_with_cookstove <- overlaps_with_cookstove | apply(overlaps, 1, any)
   }
   
-  # Store the indices of cookstove geometries that have an overlap with REDD geometries
-  overlap_indices[[i]] <- which(overlaps_with_redd)
+  # Store the indices of REDD geometries that have an overlap with cookstove geometries
+  overlap_indices_redd[[j]] <- which(overlaps_with_cookstove)
 }
 
-##############################
-#2. Overlapping analysis using st_intersection
+
+# Assuming redd_sf_list and overlap_indices_redd are already defined
+
+# Extract the overlapping REDD+ geometries into a new list of sf objects
+overlapping_geometries_redd_list <- lapply(seq_along(overlap_indices_redd), function(j) {
+  if (length(overlap_indices_redd[[j]]) > 0) {
+    redd_sf_list[[j]][overlap_indices_redd[[j]], ]
+  }
+})
+
+# Remove NULL elements if any exist due to no overlaps
+#overlapping_geometries_redd_list <- Filter(Negate(is.null), overlapping_geometries_redd_list)
+
+overlap_redd <- do.call(rbind, overlapping_geometries_redd_list)
+
 
 # Combine all cookstove sf objects into one sf object
 all_cookstove_sf <- do.call(rbind, cookstove_sf_list)
@@ -102,19 +116,56 @@ all_cookstove_sf <- do.call(rbind, cookstove_sf_list)
 # Combine all REDD+ sf objects into one sf object
 all_redd_sf <- do.call(rbind, redd_sf_list)
 
-#Perform the overlap analysis using st_intersection
 
-tryCatch({
-  overlap_sf <- st_intersection(all_cookstove_sf, all_redd_sf)
-}, error = function(e) {
-  message("Error during intersection: ", e$message)
-  # Use st_intersection again after making geometries valid and simplified
-  all_cookstove_sf <- st_make_valid(all_cookstove_sf) %>% st_simplify(preserveTopology = TRUE)
-  all_redd_sf <- st_make_valid(all_redd_sf) %>% st_simplify(preserveTopology = TRUE)
-  overlap_sf <- st_intersection(all_cookstove_sf, all_redd_sf)
+
+############
+# Create an empty geometry placeholder for the overlap
+empty_overlap <- st_sf(geometry = st_sfc(), overlaps = logical(0))
+
+# Assuming all_geometries_sf is your combined sf object from previous steps
+# Add the empty geometry to your sf object
+all_geometries_sf <- rbind(all_geometries_sf, empty_overlap, fill = TRUE)
+
+# Note: 'fill = TRUE' argument in rbind ensures that missing fields are filled with NA
+
+# Example modification
+all_geometries_with_overlap_info <- lapply(seq_along(redd_sf_list), function(j) {
+  current_sf <- redd_sf_list[[j]]
+  if (length(overlap_indices_redd[[j]]) > 0) {
+    # Mark overlapping geometries
+    current_sf$overlaps <- ifelse(seq_len(nrow(current_sf)) %in% overlap_indices_redd[[j]], TRUE, FALSE)
+  } else {
+    # Mark as non-overlapping if there are no overlaps
+    current_sf$overlaps <- FALSE
+  }
+  current_sf
 })
 
-##################################################
+# Flatten the list into a single sf object
+all_geometries_sf <- do.call(rbind, all_geometries_with_overlap_info)
+
+
+all_geometries_with_overlap_info <- lapply(seq_along(redd_sf_list), function(j) {
+  current_sf <- redd_sf_list[[j]]
+  
+  # Initialize a column to mark overlap status; default to FALSE (i.e., no overlap)
+  current_sf$overlaps <- FALSE
+  
+  # Check if there are supposed overlap indices for the current sf object
+  if (!is.null(overlap_indices_redd[[j]]) && length(overlap_indices_redd[[j]]) > 0) {
+    # Mark geometries that are considered overlapping based on indices
+    current_sf$overlaps[overlap_indices_redd[[j]]] <- TRUE
+  }
+  
+  # Return the modified sf object
+  current_sf
+})
+
+# Combine all modified sf objects into a single sf object
+all_geometries_sf <- do.call(rbind, all_geometries_with_overlap_info)
+
+
+#########################
 # Plotting the overlap using leaflet
 leaflet() %>%
   addProviderTiles(providers$OpenStreetMap) %>%
@@ -136,18 +187,17 @@ leaflet() %>%
   addTiles() %>%  # Adds a base map
   addPolygons(data = all_cookstove_sf, fillColor = "blue", color = "black", fillOpacity = 0.5, weight = 1, 
               group = "Cookstove Projects") %>%
-  addPolygons(data = all_redd_sf, fillColor = "green", color = "black", fillOpacity = 0.5, weight = 1, 
+  addPolygons(data = all_redd_sf, fillColor = "black", color = "black", fillOpacity = 0.5, weight = 1, 
               group = "REDD+ Projects") %>%
-  addPolygons(data = overlap_sf, fillColor = "red", color = "black", fillOpacity = 0.7, weight = 1, 
+  addPolygons(data = all_geometries_sf, fillColor = "red", color = "black", fillOpacity = 0.7, weight = 1, 
               group = "Overlapping Areas") %>%
   addLayersControl(
     overlayGroups = c("Cookstove Projects", "REDD+ Projects", "Overlapping Areas"),
     options = layersControlOptions(collapsed = FALSE)
   ) %>%
   addLegend(position = "bottomright", 
-            colors = c("blue", "green", "red"), 
+            colors = c("blue", "black", "red"), 
             labels = c("Cookstove Projects", "REDD+ Projects", "Overlapping Areas"), 
             opacity = 0.5)
 
 
-##################################################
