@@ -10,7 +10,7 @@ library(sf)
 library(dplyr)
 library(leaflet)
 library(ggplot2)
-library(mapview)
+
 
 #Creating function to read and validate geometries 
 read_and_make_valid <- function(file) {
@@ -29,7 +29,7 @@ read_and_make_valid <- function(file) {
 
 #Reading the KML files
 cookstove_files <- list.files(path = "KML file/VCS_COOKSTOVE/Africa", pattern = "\\.kml$", full.names = TRUE)
-redd_files <- list.files(path = "KML file/VCS_REDD/Africa", pattern = "\\.kml$", full.names = TRUE)
+AD_files <- list.files(path = "KML file/VCS_REDD/Africa", pattern = "\\.kml$", full.names = TRUE)
 
 #Creating list of sf object for cookstove and REDD
 cookstove_sf_list <- lapply(cookstove_files, read_and_make_valid)
