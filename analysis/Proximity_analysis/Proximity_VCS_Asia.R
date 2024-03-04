@@ -1,10 +1,8 @@
 #####################
-################################
+#Loading the libraries
 library(sf)
 library(leaflet)
 library(dplyr)
-
-
 
 #Creating function to read and validate geometries 
 read_and_make_valid <- function(file) {
@@ -24,8 +22,8 @@ read_and_make_valid <- function(file) {
 }
 
 #Reading the KML files
-cookstove_files <- list.files(path = "KML file/VCS_COOKSTOVE/Africa", pattern = "\\.kml$", full.names = TRUE)
-avoided_def_files <- list.files(path = "KML file/VCS_REDD/Africa", pattern = "\\.kml$", full.names = TRUE)
+cookstove_files <- list.files(path = "KML file/VCS_COOKSTOVE/Asia", pattern = "\\.kml$", full.names = TRUE)
+avoided_def_files <- list.files(path = "KML file/VCS_REDD/Asia", pattern = "\\.kml$", full.names = TRUE)
 
 #Creating list of sf object for cookstove and avoided deforestation 
 cookstove_sf_list <- lapply(cookstove_files, read_and_make_valid)
@@ -95,7 +93,7 @@ distances <- st_distance(avoided_def, cookstove_sf)
 avoided_def$min_distance_to_cookstove <- apply(distances, 1, min)
 
 # Define the threshold for close proximity
-proximity_threshold <- 5000  # 10 km
+proximity_threshold <- 5000  # 5 km
 
 
 # Filter REDD+ projects that are within close proximity to any cookstove project
@@ -112,29 +110,4 @@ m <- m %>%
               fillOpacity = 0.8, # Fill opacity
               weight = 2, # Outline weight
               popup = ~as.character(filename)) # Popup content
-
-
-######
-# Calculate distances from each REDD+ project to all cookstove buffers
-# This returns a matrix of distances where each row corresponds to a REDD+ project
-# and each column to a cookstove buffer
-distances_matrix <- st_distance(redd_sf, cookstove_buffers)
-
-# Find the minimum distance for each REDD+ project to the nearest cookstove buffer
-nearest_distances <- apply(distances_matrix, 1, min)
-
-# If you want to add these distances back to the REDD+ sf object
-redd_sf$nearest_distance <- nearest_distances
-
-#################
-
-# Calculate nearest distance from each REDD+ project to cookstove buffers
-nearest_distances <- st_distance(redd_sf, cookstove_buffers, by_element = TRUE)
-
-# Add this distance information to the REDD+ sf object (assuming it's in meters)
-redd_sf$nearest_distance_to_cookstove <- apply(nearest_distances, 1, min) / 1000 # Convert to kilometers
-
-# View the updated REDD+ sf object
-head(redd_sf)
-##############
-
+m

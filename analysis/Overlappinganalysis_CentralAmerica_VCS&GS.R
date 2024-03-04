@@ -31,65 +31,67 @@ read_and_make_valid <- function(file) {
 
 #Reading the KML files
 cookstove_files <- list.files(path = "D:/Thesis/KML file/GS_COOKSTOVE_NEW/Central America", pattern = "\\.kml$", full.names = TRUE)
-redd_files <- list.files(path = "D:/Thesis/KML file/VCS_REDD/America/Central America", pattern = "\\.kml$", full.names = TRUE)
+avoided_def_files <- list.files(path = "D:/Thesis/KML file/VCS_REDD/America/Central America", pattern = "\\.kml$", full.names = TRUE)
 
 #Creating list of sf object for cookstove and REDD
 cookstove_sf_list <- lapply(cookstove_files, read_and_make_valid)
-redd_sf_list <- lapply(redd_files, read_and_make_valid)
+avoided_def_list <- lapply(avoided_def_files, read_and_make_valid)
 
-#Loop analysis
-# Initialize an empty list to store indices of REDD geometries that overlap with cookstove geometries
-overlap_indices_redd <- list()
+#Transforming all geometries to a common CRS (WGS 84)
+cookstove_sf_list <- lapply(cookstove_sf_list, function(sf) st_transform(sf, 4326))
+avoided_def_list <- lapply(avoided_def_list, function(sf) st_transform(sf, 4326))
 
-# Loop through each REDD sf object
-for (j in seq_along(redd_sf_list)) {
+###Loop analysis
+# Initialize an empty list to store indices of Avoided Deforestation geometries that overlap with cookstove geometries
+overlap_indices_ad <- list()
+
+# Loop through each Avoided deforestation sf object
+for (j in seq_along(avoided_def_list)) {
   
   # Initialize a logical vector for overlap status of the current REDD geometry
-  overlaps_with_cookstove <- rep(FALSE, nrow(redd_sf_list[[j]]))
+  overlaps_with_cookstove <- rep(FALSE, nrow(avoided_def_list[[j]]))
   
   # Loop through each cookstove sf object
   for (i in seq_along(cookstove_sf_list)) {
     
     # Perform the overlap analysis
-    overlaps <- st_intersects(redd_sf_list[[j]], cookstove_sf_list[[i]], sparse = FALSE)
+    overlaps <- st_intersects(avoided_def_list[[j]], cookstove_sf_list[[i]], sparse = FALSE)
     
     # Check which REDD geometries have an overlap with any cookstove geometry
     overlaps_with_cookstove <- overlaps_with_cookstove | apply(overlaps, 1, any)
   }
   
   # Store the indices of REDD geometries that have an overlap with cookstove geometries
-  overlap_indices_redd[[j]] <- which(overlaps_with_cookstove)
+  overlap_indices_ad[[j]] <- which(overlaps_with_cookstove)
 }
 
 # Extract the overlapping REDD+ geometries into a new list of sf objects
-overlapping_geometries_redd_list <- lapply(seq_along(overlap_indices_redd), function(j) {
-  if (length(overlap_indices_redd[[j]]) > 0) {
-    redd_sf_list[[j]][overlap_indices_redd[[j]], ]
+overlapping_geometries_ad_list <- lapply(seq_along(overlap_indices_ad), function(j) {
+  if (length(overlap_indices_ad[[j]]) > 0) {
+    avoided_def_list[[j]][overlap_indices_ad[[j]], ]
   }
 })
 
 # Remove NULL elements if any exist due to no overlaps
-overlapping_geometries_redd_list <- Filter(Negate(is.null), overlapping_geometries_redd_list)
+overlapping_geometries_ad_list <- Filter(Negate(is.null), overlapping_geometries_ad_list)
 
 #Combine all overlap sf object into sf object
-overlap_sf <- do.call(rbind, overlapping_geometries_redd_list)
+overlap_sf <- do.call(rbind, overlapping_geometries_ad_list)
 
 # Combine all cookstove sf objects into one sf object
 all_cookstove_sf <- do.call(rbind, cookstove_sf_list)
 
-# Combine all REDD+ sf objects into one sf object
-all_redd_sf <- do.call(rbind, redd_sf_list)
-
-###########################################
+# Combine all Avoided deforestation sf objects into one sf object
+all_avoided_def_sf <- do.call(rbind, avoided_def_list)
 
 ############################
 # Plotting the overlap using leaflet
 leaflet() %>%
   addProviderTiles(providers$OpenStreetMap) %>%
   addPolygons(data = all_cookstove_sf, fillColor = "blue", fillOpacity = 0.5, color = "white", weight = 1) %>%
-  addPolygons(data = all_redd_sf, fillColor = "grey", fillOpacity = 0.5, color = "white", weight = 1, dashArray = "5, 5") %>%
+  addPolygons(data = all_avoided_def_sf, fillColor = "grey", fillOpacity = 0.5, color = "white", weight = 1, dashArray = "5, 5") %>%
   addPolygons(data = overlap_sf, fillColor = "red", fillOpacity = 0.7, color = "black", weight = 1) %>%
-  addLegend("bottomright", colors = c("blue", "grey", "red"), labels = c("Cookstove", "REDD+", "Overlap"), opacity = 0.5)
+  addLegend("bottomright", colors = c("blue", "grey", "red"), labels = c("Cookstove", "Avoided deforestation", "Overlap"), opacity = 0.5)
 
 #Plotting only the overlap using leaflet 
 leaflet() %>%
@@ -100,25 +102,20 @@ leaflet() %>%
     options = layersControlOptions(collapsed = FALSE)
   )
 
-#Plotting interactive map using leaflet with filename 
-
 leaflet() %>%
-  addTiles() %>%  # Adds a base map
-  addPolygons(data = all_cookstove_sf, fillColor = "blue", color = "black", fillOpacity = 0.5, weight = 1, 
-              group = "Cookstove Projects", label = ~filename) %>%
-  addPolygons(data = all_redd_sf, fillColor = "black", color = "black", fillOpacity = 0.5, weight = 1, 
-              group = "REDD+ Projects", label = ~filename) %>%
+  addProviderTiles(providers$OpenStreetMap) %>%
+  addPolygons(data = all_cookstove_sf, fillColor = "blue", fillOpacity = 0.5, color = "white", weight = 1, 
+              group = "Cookstove Projects") %>%
+  addPolygons(data = all_avoided_def_sf, fillColor = "green", color = "black", fillOpacity = 0.5, weight = 1, 
+              group = "Avoided Deforestation Projects") %>%
   addPolygons(data = overlap_sf, fillColor = "red", color = "black", fillOpacity = 0.7, weight = 1, 
-              group = "Overlapping Areas", label = ~filename) %>%
-  addLayersControl(
-    overlayGroups = c("Cookstove Projects", "REDD+ Projects", "Overlapping Areas"),
-    options = layersControlOptions(collapsed = FALSE)
-  ) %>%
-  addLegend(position = "bottomright", 
-            colors = c("blue", "black", "red"), 
-            labels = c("Cookstove Projects", "REDD+ Projects", "Overlapping Areas"), 
-            opacity = 0.5)
+              group = "Overlapping Areas") %>%
+  addLayersControl(overlayGroups = c("Cookstove Projects", "Avoided Deforestation Projects", "Overlapping Areas"),
+                   options = layersControlOptions(collapsed = FALSE)) %>%
+  addLegend(position = "bottomright", colors = c("blue", "green", "red"), 
+            labels = c("Cookstove Projects", "Avoided Deforestation Projects", "Overlapping Areas"), opacity = 0.5)
 
+###########################################
 #Saving file in geopackage format 
 # Specify the path to your folder and the filename
 overlap_centralamerica_VCS_GS <- "D:/Thesis/Version/25.02.2024/New folder/Overlap_centralamerica_vcs_gs.gpkg"
