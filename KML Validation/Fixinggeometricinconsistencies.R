@@ -19,7 +19,7 @@ check_kml_validity <- function(kml_path) {
 ###Validate KML files for different regions 
 
 # Path to the directory containing your KML files (Asia-VCS)
-cookstove_asia <- list.files(path = "D:/Thesis/KML file/VCS_COOKSTOVE/Asia", pattern = "\\.kml$", full.names = TRUE)
+cookstove_asia <- list.files(path = "D:/Thesis/KML file/ALLPROJECT/VCS_cookstove", pattern = "\\.kml$", full.names = TRUE)
 redd_asia <- list.files(path = "D:/Thesis/KML file/VCS_REDD/Asia", pattern = "\\.kml$", full.names = TRUE)
 
 # Check the validity of each KML file

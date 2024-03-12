@@ -53,7 +53,7 @@ cookstove_buffers <- do.call(rbind, lapply(1:length(cookstove_buffers_list), fun
 
 
 # Assuming cookstove_sf and redd_sf are already loaded and prepared
-buffer_distances <- c(15000, 10000, 5000) # Start with the largest buffer
+#buffer_distances <- c(15000, 10000, 5000) # Start with the largest buffer
 buffer_colors <-  c("#FF0000", "#00FF00", "#0000FF") # Assign distinct colors
 
 # Initialize the leaflet map
@@ -67,7 +67,8 @@ for (i in seq_along(buffer_distances)) {
   
   # Add the buffer as a polygon layer to the map with the specified color
   m <- m %>% addPolygons(data = current_buffer, 
-                         fillColor = "#FFFDD0",
+                         group = paste0(buffer_distances[i], " km Buffer"),
+                         fillColor = "transparent",
                          color = buffer_colors[i], 
                          fillOpacity = 0.3, 
                          weight = 4,
@@ -78,11 +79,17 @@ for (i in seq_along(buffer_distances)) {
 # Add avoided deforestation project areas as polygons to the map
 m <- m %>%
   addPolygons(data = avoided_def,
-              fillColor = "red", # No fill for REDD+ projects
-              color = "#FF0000", # RED outline color for REDD+ projects
+              fillColor = "black", # No fill for REDD+ projects
+              color = "#000000", # RED outline color for REDD+ projects
               weight = 2,
               fillOpacity = 1,
-              popup = ~as.character(filename)) # Ensure 'Name' matches your column name for REDD+ project names
+              popup = ~as.character(filename), # Ensure 'Name' matches your column name for REDD+ project names
+              group = "Avoided Deforestation")
+
+# Add layers control
+m <- m %>%
+  addLayersControl(overlayGroups = paste0(buffer_distances, " m Buffer"),
+                   options = layersControlOptions(collapsed = FALSE))
 
 # Print the map
 m
@@ -95,7 +102,7 @@ distances <- st_distance(avoided_def, cookstove_sf)
 avoided_def$min_distance_to_cookstove <- apply(distances, 1, min)
 
 # Define the threshold for close proximity
-proximity_threshold <- 5000  # 10 km
+proximity_threshold <- 10000  # 10 km
 
 
 # Filter REDD+ projects that are within close proximity to any cookstove project
@@ -106,19 +113,46 @@ print(redd_close_proximity$filename)
 
 # Assuming 'm' is your Leaflet map object already initialized
 m <- m %>%
-  addPolygons(data = redd_close_proximity,
-              fillColor = "#00FF00", # Fill color
+  addPolygons(data = cookstove_close_proximity,
+              fillColor = "transparent", # Fill color
               color = "#000000", # Outline color
               fillOpacity = 0.8, # Fill opacity
               weight = 2, # Outline weight
               popup = ~as.character(filename)) # Popup content
 
+m <- m %>%
+  addPolygons(data = redd_close_proximity,
+              fillColor = "#FF0000", # Fill color
+              color = "#000000", # Outline color
+              fillOpacity = 0.8, # Fill opacity
+              weight = 2, # Outline weight
+              popup = ~as.character(filename)) # Popup content
 
+m
 ######
+
+# Calculate the distances from each cookstove project to all REDD+ projects
+distances_cookstove <- st_distance(cookstove_sf, avoided_def)
+
+# Find the minimum distance for each cookstove project
+cookstove_sf$min_distance_to_REDD <- apply(distances_cookstove, 1, min)
+
+# Define the threshold for close proximity
+proximity_threshold <- 10000  # 10 km
+
+# Filter cookstove projects that are within close proximity to any REDD+ project
+cookstove_close_proximity <- cookstove_sf[cookstove_sf$min_distance_to_REDD <= proximity_threshold, ]
+
+print(cookstove_close_proximity)
+
+
+
+
+
 # Calculate distances from each REDD+ project to all cookstove buffers
 # This returns a matrix of distances where each row corresponds to a REDD+ project
 # and each column to a cookstove buffer
-distances_matrix <- st_distance(redd_sf, cookstove_buffers)
+distances_matrix <- st_distance(avoided_def, cookstove_buffers)
 
 # Find the minimum distance for each REDD+ project to the nearest cookstove buffer
 nearest_distances <- apply(distances_matrix, 1, min)
@@ -137,4 +171,5 @@ redd_sf$nearest_distance_to_cookstove <- apply(nearest_distances, 1, min) / 1000
 # View the updated REDD+ sf object
 head(redd_sf)
 ##############
+
 

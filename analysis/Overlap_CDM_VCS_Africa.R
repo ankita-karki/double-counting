@@ -38,18 +38,15 @@ cookstove_sf_list <- lapply(cookstove_files, read_and_make_valid)
 avoided_def_list <- lapply(avoided_def_files, read_and_make_valid)
 
 #Transforming all geometries to a common CRS (WGS 84)
-cookstove_sf_list <- lapply(cookstove_sf_list, function(sf) st_transform(sf, 4326))
-avoided_def_list <- lapply(avoided_def_list, function(sf) st_transform(sf, 4326))
+#cookstove_sf_list <- lapply(cookstove_sf_list, function(sf) st_transform(sf, 4326))
+#avoided_def_list <- lapply(avoided_def_list, function(sf) st_transform(sf, 4326))
 
 ###################################################
-
-cookstove_sf_list[[7]]  <- st_make_valid(cookstove_sf_list[[7]])
-cookstove_sf_list[[12]] <- st_make_valid(cookstove_sf_list[[12]])
 
 ## Drop trouble maker ##
 # the fourth row of the eleventh element of redd_sf_list causes the issues.  
 # Dropping it results in a loop that is finished after < 1min on my computer. 
-avoided_def_list[[1]] <- avoided_def_list[[1]][1:3,]
+#avoided_def_list[[1]] <- avoided_def_list[[1]][1:3,]
 
 ###########################
 
@@ -67,28 +64,28 @@ for (j in seq_along(avoided_def_list)) {
   for (i in seq_along(cookstove_sf_list)) {
     
     # Perform the overlap analysis
-    overlaps <- st_intersects(redd_sf_list[[j]], cookstove_sf_list[[i]], sparse = FALSE)
+    overlaps <- st_intersects(avoided_def_list[[j]], cookstove_sf_list[[i]], sparse = FALSE)
     
     # Check which REDD geometries have an overlap with any cookstove geometry
     overlaps_with_cookstove <- overlaps_with_cookstove | apply(overlaps, 1, any)
   }
   
   # Store the indices of REDD geometries that have an overlap with cookstove geometries
-  overlap_indices_redd[[j]] <- which(overlaps_with_cookstove)
+  overlap_indices_avoided_def[[j]] <- which(overlaps_with_cookstove)
 }
 
 # Extract the overlapping REDD+ geometries into a new list of sf objects
-overlapping_geometries_redd_list <- lapply(seq_along(overlap_indices_redd), function(j) {
-  if (length(overlap_indices_redd[[j]]) > 0) {
-    redd_sf_list[[j]][overlap_indices_redd[[j]], ]
+overlapping_geometries_avoided_def_list <- lapply(seq_along(overlap_indices_redd), function(j) {
+  if (length(overlap_indices_avoided_def[[j]]) > 0) {
+    redd_sf_list[[j]][overlap_indices_avoided_def[[j]], ]
   }
 })
 
 # Remove NULL elements if any exist due to no overlaps
-overlapping_geometries_redd_list <- Filter(Negate(is.null), overlapping_geometries_redd_list)
+overlapping_geometries_ad_list <- Filter(Negate(is.null), overlapping_geometries_avoided_def_list)
 
 #Combine all overlap sf object into sf object
-overlap_sf <- do.call(rbind, overlapping_geometries_redd_list)
+overlap_sf <- do.call(rbind, overlapping_geometries_ad_list)
 
 
 #2. Overlapping analysis using st_intersection
@@ -115,19 +112,12 @@ tryCatch({
 # Plotting the overlap using leaflet
 leaflet() %>%
   addProviderTiles(providers$OpenStreetMap) %>%
-  addPolygons(data = all_cookstove_sf, fillColor = "blue", fillOpacity = 0.5, color = "white", weight = 1) %>%
-  addPolygons(data = all_avoided_def_sf, fillColor = "grey", fillOpacity = 0.5, color = "white", weight = 1, dashArray = "5, 5") %>%
-  addPolygons(data = overlap_sf, fillColor = "red", fillOpacity = 0.7, color = "black", weight = 1) %>%
-  addLegend("bottomright", colors = c("blue", "grey", "red"), labels = c("Cookstove", "Avoided deforestation", "Overlap"), opacity = 0.5)
+  addPolygons(data = all_cookstove_sf, fillColor = "blue", fillOpacity = 1, color = "white", weight = 1) %>%
+  addPolygons(data = all_avoided_def_sf, fillColor = "red", fillOpacity = 1, color = "white", weight = 1, dashArray = "5, 5") %>%
+  #addPolygons(data = overlap_sf, fillColor = "red", fillOpacity = 0.7, color = "black", weight = 1) %>%
+  addLegend("bottomright", colors = c("blue", "red"), labels = c("Cookstove", "Avoided deforestation"), opacity = 1)
 
-#Plotting only the overlap using leaflet 
-leaflet() %>%
-  addProviderTiles(providers$OpenStreetMap) %>%  # Add default OpenStreetMap tiles
-  addPolygons(data = overlap_sf, color = "#FF0000", weight = 1, smoothFactor = 0.5, opacity = 1.0, fillOpacity = 0.5) %>%
-  addLayersControl(
-    overlayGroups = c("Overlap"),
-    options = layersControlOptions(collapsed = FALSE)
-  )
+
 #Interactive plotting using leaflet
 leaflet() %>%
   addTiles() %>%  # Adds a base map
@@ -155,3 +145,51 @@ overlap_Africa_VCS <- "D:/Thesis/Version/25.02.2024/New folder/Overlap_Africa_VC
 
 # Save the sf object as a GeoPackage
 st_write(overlap_sf, overlap_Africa_VCS, delete_layer = TRUE)
+
+
+###################
+#Proximity analysis 
+
+# Assume all_cookstove_sf and all_avoided_def_sf are already defined sf objects
+
+buffer_distances <- c(5000, 10000, 15000) # Distances in meters
+buffer_colors <- c("#FF0000", "#00FF00", "#0000FF") # Colors for each buffer distance
+
+# Initialize the leaflet map with OpenStreetMap tiles
+m <- leaflet() %>%
+  addProviderTiles(providers$OpenStreetMap)
+
+# Loop through each buffer distance to create and add buffer polygons to the map
+for (i in seq_along(buffer_distances)) {
+  # Dynamically create buffer for each distance
+  current_buffer <- st_buffer(all_cookstove_sf, dist = buffer_distances[i])
+  
+  # Add the buffer as a polygon layer to the map with a unique color and group
+  m <- m %>%
+    addPolygons(data = current_buffer, 
+                fillColor = "transparent",
+                color = buffer_colors[i],
+                fillOpacity = 0.3,
+                weight = 2,
+                opacity = 0.8,
+                popup = ~paste(buffer_distances[i] / 1000, "km buffer"),
+                group = paste0(buffer_distances[i], " m Buffer"))
+}
+
+# Add avoided deforestation project areas as polygons to the map
+m <- m %>%
+  addPolygons(data = all_avoided_def_sf,
+              fillColor = "#000000", # Fill color for avoided deforestation projects
+              color = "#000000", # Border color for avoided deforestation projects
+              weight = 2,
+              fillOpacity = 0.7, # Adjusted for visibility
+              popup = ~as.character(filename), # Adjust 'filename' to your specific column name if different
+              group = "Avoided Deforestation")
+
+# Add layers control to toggle visibility of each buffer layer and the avoided deforestation layer
+m <- m %>%
+  addLayersControl(overlayGroups = c(paste0(buffer_distances, " m Buffer"), "Avoided Deforestation"),
+                   options = layersControlOptions(collapsed = FALSE))
+
+# Print the map
+m
