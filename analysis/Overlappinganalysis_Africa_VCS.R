@@ -53,7 +53,7 @@ cookstove_sf_list[[12]] <- st_make_valid(cookstove_sf_list[[12]])
 ## Drop trouble maker ##
 # the fourth row of the eleventh element of redd_sf_list causes the issues.  
 # Dropping it results in a loop that is finished after < 1min on my computer. 
-redd_sf_list[[1]] <- redd_sf_list[[1]][1:3,]
+#redd_sf_list[[1]] <- redd_sf_list[[1]][1:3,]
 ####################################################################
 ##1. Overlapping analysis using loop 
 

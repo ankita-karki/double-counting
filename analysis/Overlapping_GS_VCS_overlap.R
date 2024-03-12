@@ -88,7 +88,7 @@ overlap_sf <- do.call(rbind, overlapping_geometries_ad_list)
 all_cookstove_sf <- do.call(rbind, cookstove_sf_list)
 
 # Combine all Avoided deforestation sf objects into one sf object
-all_avoided_def_sf <- do.call(rbind, avoid_def_list)
+all_avoided_def_sf <- do.call(rbind, avoided_def_list)
 
 #Performing the overlap analysis using st_intersection
 
@@ -145,4 +145,54 @@ overlap_Africa_VCS_GS <- "D:/Thesis/Version/25.02.2024/New folder/Overlap_africa
 
 # Save the sf object as a GeoPackage
 st_write(overlap_sf, overlap_Africa_VCS_GS, delete_layer = TRUE)
+
+
+################
+########################
+#Proximity analysis 
+
+# Assume all_cookstove_sf and all_avoided_def_sf are already defined sf objects
+
+buffer_distances <- c(5000, 10000, 15000) # Distances in meters
+buffer_colors <- c("#FF0000", "#00FF00", "#0000FF") # Colors for each buffer distance
+
+# Initialize the leaflet map with OpenStreetMap tiles
+m <- leaflet() %>%
+  addProviderTiles(providers$OpenStreetMap)
+
+# Loop through each buffer distance to create and add buffer polygons to the map
+for (i in seq_along(buffer_distances)) {
+  # Dynamically create buffer for each distance
+  current_buffer <- st_buffer(all_cookstove_sf, dist = buffer_distances[i])
+  
+  # Add the buffer as a polygon layer to the map with a unique color and group
+  m <- m %>%
+    addPolygons(data = current_buffer, 
+                fillColor = "transparent",
+                color = buffer_colors[i],
+                fillOpacity = 0.3,
+                weight = 2,
+                opacity = 0.8,
+                popup = ~paste(buffer_distances[i] / 1000, "km buffer"),
+                group = paste0(buffer_distances[i], " m Buffer"))
+}
+
+# Add avoided deforestation project areas as polygons to the map
+m <- m %>%
+  addPolygons(data = all_avoided_def_sf,
+              fillColor = "#000000", # Fill color for avoided deforestation projects
+              color = "#000000", # Border color for avoided deforestation projects
+              weight = 2,
+              fillOpacity = 0.7, # Adjusted for visibility
+              popup = ~as.character(filename), # Adjust 'filename' to your specific column name if different
+              group = "Avoided Deforestation")
+
+# Add layers control to toggle visibility of each buffer layer and the avoided deforestation layer
+m <- m %>%
+  addLayersControl(overlayGroups = c(paste0(buffer_distances, " m Buffer"), "Avoided Deforestation"),
+                   options = layersControlOptions(collapsed = FALSE))
+
+# Print the map
+m
+
 
