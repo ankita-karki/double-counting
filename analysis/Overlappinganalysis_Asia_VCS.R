@@ -222,9 +222,190 @@ m <- m %>%
 # Print the map
 m
 
+#######################
+#Forest land cover overlay 
 #############################################
+library(sf)
+library(raster)
+library(leaflet)
+library(rgdal)
+
+# Your existing code for initializing the map and adding buffer polygons...
+
+# Load the forest cover raster
+forest_cover <- raster("D:/Thesis/Forestcover/forestcover/AfricaLandCover2020.tif")
+
+# Convert forest cover raster to polygons
+# Convert raster to polygons
+polygon_layer <- rasterToPolygons(forest_cover, fun=function(x) {x==1}, dissolve=TRUE)
+
+# Convert to sf object
+polygon_sf <- st_as_sf(polygon_layer)
+# Calculate distance from each cookstove project to the nearest forest cover
+all_cookstove_sf$nearest_forest_distance <- st_distance(all_cookstove_sf, forest_cover_sf, by_element=TRUE) %>% apply(1, min)
+
+# Calculate distance from each avoided deforestation project to the nearest forest cover
+all_avoided_def_sf$nearest_forest_distance <- st_distance(all_avoided_def_sf, forest_cover_sf, by_element=TRUE) %>% apply(1, min)
+
+
+
+# Add layers control to include the Forest Cover layer
+m <- m %>%
+  addLayersControl(overlayGroups = c(paste0(buffer_distances, " m Buffer"), "Avoided Deforestation", "Forest Cover"),
+                   options = layersControlOptions(collapsed = FALSE))
+
+# Print the map
+m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #need to work on #
 ################################################
+
+library(sf)
+library(leaflet)
+library(dplyr)
+
+# Assuming all_cookstove_sf and all_avoided_def_sf are already defined sf objects
+buffer_distances <- c(5000, 10000, 15000) # Distances in meters
+buffer_colors <- c("#FF0000", "#00FF00", "#0000FF") # Colors for each buffer distance
+
+# Initialize the leaflet map with OpenStreetMap tiles
+m <- leaflet() %>%
+  addProviderTiles(providers$OpenStreetMap)
+
+overlapping_projects <- list()
+
+# Loop through each buffer distance to create and add buffer polygons to the map
+for (i in seq_along(buffer_distances)) {
+  # Dynamically create buffer for each distance
+  current_buffer <- st_buffer(all_cookstove_sf, dist = buffer_distances[i])
+  
+  # Add the buffer as a polygon layer to the map with a unique color and group
+  m <- m %>%
+    addPolygons(data = current_buffer, 
+                fillColor = "transparent",
+                color = buffer_colors[i],
+                fillOpacity = 0.3,
+                weight = 2,
+                opacity = 0.8,
+                popup = ~paste(buffer_distances[i] / 1000, "km buffer"),
+                group = paste0(buffer_distances[i], " m Buffer"))
+  
+  # Check for overlaps between current buffer and avoided deforestation projects
+  overlaps <- st_intersects(current_buffer, all_avoided_def_sf, sparse = FALSE)
+  
+  # Find the avoided deforestation projects that overlap with the current buffer
+  if(any(overlaps)) {
+    overlapping_filenames <- all_avoided_def_sf$filename[apply(overlaps, 2, any)]
+    overlapping_projects[[i]] <- unique(overlapping_filenames)
+  }
+}
+
+# Flatten the list and remove duplicates
+overlapping_projects_flat <- unique(unlist(overlapping_projects))
+
+# Print filenames of overlapping projects
+if(length(overlapping_projects_flat) > 0) {
+  cat("Filenames of overlapping REDD projects:\n")
+  print(overlapping_projects_flat)
+} else {
+  cat("No overlapping REDD projects found.\n")
+}
+
+# Add avoided deforestation project areas as polygons to the map
+m <- m %>%
+  addPolygons(data = all_avoided_def_sf,
+              fillColor = "#000000", # Fill color for avoided deforestation projects
+              color = "#000000", # Border color for avoided deforestation projects
+              weight = 2,
+              fillOpacity = 0.7, # Adjusted for visibility
+              popup = ~as.character(filename), # Ensure 'filename' matches your column name
+              group = "Avoided Deforestation")
+
+# Add layers control to toggle visibility of each buffer layer and the avoided deforestation layer
+m <- m %>%
+  addLayersControl(overlayGroups = c(paste0(buffer_distances, " m Buffer"), "Avoided Deforestation"),
+                   options = layersControlOptions(collapsed = FALSE))
+
+# Print the map
+m
+
+
+##########################
+
+# Assuming all_cookstove_sf and all_avoided_def_sf are predefined sf objects
+buffer_distances <- c(5000, 10000, 15000) # Distances in meters
+
+# Prepare a list to hold results
+results <- vector("list", length(buffer_distances))
+names(results) <- paste(buffer_distances / 1000, "km")
+
+# Loop through each buffer distance
+for (distance in buffer_distances) {
+  # Apply buffer around each REDD project
+  redd_buffered <- st_buffer(all_avoided_def_sf, dist = distance)
+  
+  # Perform intersection test
+  intersection_test <- st_intersects(redd_buffered, all_cookstove_sf, sparse = FALSE)
+  
+  # Collect REDD project filenames that have any intersection
+  intersecting_projects <- all_avoided_def_sf$filename[apply(intersection_test, 1, any)]
+  
+  # Store results
+  results[[paste(distance / 1000, "km")]] <- intersecting_projects
+}
+
+# Print results
+for (distance in names(results)) {
+  cat(paste("REDD projects intersecting with any cookstove project within", distance, "buffer:\n"))
+  intersecting_projects <- results[[distance]]
+  if (length(intersecting_projects) > 0) {
+    print(intersecting_projects)
+  } else {
+    cat("No intersections found.\n")
+  }
+  cat("\n") # For better readability
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Calculate distances
 min_distances <- sapply(1:nrow(all_avoided_def_sf), function(i) {
   min(st_distance(all_avoided_def_sf[i, ], all_cookstove_sf))

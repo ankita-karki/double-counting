@@ -167,6 +167,17 @@ buffer_colors <- c("#FF0000", "#00FF00", "#0000FF") # Colors for each buffer dis
 m <- leaflet() %>%
   addProviderTiles(providers$OpenStreetMap)
 
+# Add forest cover areas as polygons to the map
+m <- m %>%
+  addPolygons(data = forest_cover_sf,
+              fillColor = "transparent", # Forest green
+              color = "#006400", # Dark green border
+              weight = 1,
+              fillOpacity = 0.5,
+              group = "Forest Cover")
+              
+m
+
 # Loop through each buffer distance to create and add buffer polygons to the map
 for (i in seq_along(buffer_distances)) {
   # Dynamically create buffer for each distance
@@ -194,6 +205,9 @@ m <- m %>%
               popup = ~as.character(filename), # Adjust 'filename' to your specific column name if different
               group = "Avoided Deforestation")
 
+
+
+
 # Add layers control to toggle visibility of each buffer layer and the avoided deforestation layer
 m <- m %>%
   addLayersControl(overlayGroups = c(paste0(buffer_distances, " m Buffer"), "Avoided Deforestation"),
@@ -202,6 +216,262 @@ m <- m %>%
 # Print the map
 m
 
+##################################
+# Your existing code for initializing the map and adding buffer polygons...
+
+# Load the forest cover raster
+forest_cover <- raster("D:/Thesis/Forestcover/forestcover/AfricaLandCover2020.tif")
+
+plot(forest_cover)
+# Aggregate the raster to lower the resolution
+# Factor 2 means that each cell in the new raster represents a 2x2 cell area of the original
+simplified_raster <- aggregate(forest_cover, fact=5, fun=mean)
+
+# Now try converting the simplified raster to polygons
+simplified_polygons <- rasterToPolygons(simplified_raster, fun=function(x) {x==1}, dissolve=TRUE)
+
+
+# Convert forest cover raster to polygons
+# Convert raster to polygons
+polygon_layer <- rasterToPolygons(forest_cover, fun=function(x) {x==1}, dissolve=TRUE)
+
+# Convert to sf object
+polygon_sf <- st_as_sf(polygon_layer)
+# Calculate distance from each cookstove project to the nearest forest cover
+all_cookstove_sf$nearest_forest_distance <- st_distance(all_cookstove_sf, forest_cover_sf, by_element=TRUE) %>% apply(1, min)
+
+# Calculate distance from each avoided deforestation project to the nearest forest cover
+all_avoided_def_sf$nearest_forest_distance <- st_distance(all_avoided_def_sf, forest_cover_sf, by_element=TRUE) %>% apply(1, min)
+
+
+
+# Add layers control to include the Forest Cover layer
+m <- m %>%
+  addLayersControl(overlayGroups = c(paste0(buffer_distances, " m Buffer"), "Avoided Deforestation", "Forest Cover"),
+                   options = layersControlOptions(collapsed = FALSE))
+
+# Print the map
+m
+
+
+#######################
+#Forest land cover overlay 
+#############################################
+library(sf)
+library(raster)
+library(leaflet)
+library(rgdal)
+
+# Your existing code for initializing the map and adding buffer polygons...
+
+# Load the forest cover raster
+forest_cover <- raster("D:/Thesis/Forestcover/forestcover/123.tif")
+
+# Reclassify the raster
+# Set values of 1 to 1, and everything else to NA
+reclass <- c(-Inf, 0.9999, NA, 
+             0.9999, 1.0001, 1, 
+             1.0001, Inf, NA)
+rclmat <- matrix(reclass, ncol=3, byrow=TRUE)
+
+forest_raster_reclass <- reclassify(forest_cover, rclmat)
+
+
+# Assuming your reclassified forest raster is 'forest_raster_reclass'
+# Reclassify the raster: we want to create a binary raster with 1 for forest and NA for non-forest
+forest_raster_reclass <- reclassify(forest_cover, cbind(1, 1), right=NA)
+
+# Convert reclassified raster to a SpatialPolygonsDataFrame for plotting
+forest_polygons <- rasterToPolygons(forest_raster_reclass, na.rm=TRUE, dissolve=TRUE)
+
+# Plot with leaflet
+leaflet() %>%
+  addProviderTiles(providers$Esri.WorldImagery) %>%  # Adding a nice basemap
+  addPolygons(data = forest_polygons,
+              fillColor = "#008000",
+              fillOpacity = 0.5,
+              color = "#004000",
+              weight = 1,
+              smoothFactor = 0.5) %>%
+  addLegend("bottomright", 
+            colors = "#008000", 
+            labels = "Forest cover",
+            title = "Legend")
+
+
+
+
+
+
+
+
+
+# Convert forest cover raster to polygons
+polygon_layer <- rasterToPolygons(forest_raster_reclass, fun=function(x) {x==1}, dissolve=TRUE)
+
+# Convert to sf object
+polygon_sf <- st_as_sf(polygon_layer)
+# Calculate distance from each cookstove project to the nearest forest cover
+all_cookstove_sf$nearest_forest_distance <- st_distance(all_cookstove_sf, forest_cover_sf, by_element=TRUE) %>% apply(1, min)
+
+# Calculate distance from each avoided deforestation project to the nearest forest cover
+all_avoided_def_sf$nearest_forest_distance <- st_distance(all_avoided_def_sf, forest_cover_sf, by_element=TRUE) %>% apply(1, min)
+
+#######################
+
+library(leaflet)
+
+# Assuming your reclassified forest raster is 'forest_raster_reclass'
+# Reclassify the raster: we want to create a binary raster with 1 for forest and NA for non-forest
+forest_raster_reclass <- reclassify(forest_cover, cbind(1, 1), right=NA)
+
+# Convert reclassified raster to a SpatialPolygonsDataFrame for plotting
+forest_polygons <- rasterToPolygons(forest_raster_reclass, na.rm=TRUE, dissolve=TRUE)
+
+# Plot with leaflet
+leaflet() %>%
+  addProviderTiles(providers$Esri.WorldImagery) %>%  # Adding a nice basemap
+  addPolygons(data = forest_polygons,
+              fillColor = "#008000",
+              fillOpacity = 0.5,
+              color = "#004000",
+              weight = 1,
+              smoothFactor = 0.5) %>%
+  addLegend("bottomright", 
+            colors = "#008000", 
+            labels = "Forest cover",
+            title = "Legend")
+
+
+##############
+#raster to tiles 
+# Install packages if they're not already installed
+if (!requireNamespace("leaflet", quietly = TRUE)) install.packages("leaflet")
+if (!requireNamespace("terra", quietly = TRUE)) install.packages("terra")
+if (!requireNamespace("htmlwidgets", quietly = TRUE)) install.packages("htmlwidgets")
+
+# Load the necessary libraries
+library(leaflet)
+library(terra)
+library(htmlwidgets)
+library(raster)
+
+# Load the forest cover raster
+raster <- raster("D:/Thesis/Forestcover/forestcover/AfricaLandCover2020.tif")
+
+# Factor 2 means that each cell in the new raster represents a 2x2 cell area of the original
+raster <- aggregate(rasterLayer, fact=1, fun=mean)
+
+# Create a map object using leaflet
+m <- leaflet() %>% 
+  addProviderTiles(providers$Esri.WorldImagery) %>% 
+  setView(lng = mean(ext(raster)[1:2]), lat = mean(ext(raster)[3:4]), zoom = 10)
+
+# Add the raster layer to the map
+
+
+
+# Create a color palette where forest areas are #4d9221 and others are transparent
+colors <- ifelse(values(raster) == 1, "#4d9221", "#FFFFFF00")
+# Note: For larger rasters, consider using addRasterImage for direct display might not be efficient
+m <- m %>% addRasterImage(raster, colors = colors, opacity = 0.8)
+
+# Print the map
+m
+
+# Create a Leaflet map
+m <- leaflet() %>%
+  addProviderTiles(providers$OpenStreetMap) %>%
+  setView(lng = mean(ext(raster)[1:2]), lat = mean(ext(raster)[3:4]), zoom = 10) %>%
+  addRasterImage(raster, colors = colors, opacity = 1, project = FALSE)
+
+# Display the map
+m
+
+
+#############################
+forest_cover_sf <- st_read("D:/Thesis/Forestcover/forestcover/New folder/AfricaForestCoverVectors.shp")
+
+forest_cover_sf <- st_set_crs(forest_cover_sf, 4326)
+
+
+
+
+
+
+# Proximity analysis setup
+buffer_distances <- c(5000, 10000, 15000) # Distances in meters
+buffer_colors <- c("#FF0000", "#00FF00", "#0000FF") # Colors for each buffer distance
+
+# Initialize the leaflet map with OpenStreetMap tiles
+m <- leaflet() %>%
+  addProviderTiles(providers$OpenStreetMap)
+
+# Loop through each buffer distance to create buffers and add to the map
+for (i in seq_along(buffer_distances)) {
+  # Create buffer for each cookstove location
+  current_buffer <- st_buffer(all_cookstove_sf, dist = buffer_distances[i])
+  
+  # Intersection between current buffer and forest cover
+  forest_in_buffer <- st_intersection(current_buffer, forest_cover_sf)
+  
+  # Add the intersected forest cover as a layer (adjust fillColor as needed)
+  m <- m %>%
+    addPolygons(data = forest_in_buffer, 
+                fillColor = buffer_colors[i],
+                fillOpacity = 0.5,
+                color = buffer_colors[i],
+                weight = 1,
+                opacity = 1,
+                group = paste0(buffer_distances[i], "m Forest Cover"),
+                popup = ~paste(buffer_distances[i] / 1000, "km buffer - Forest Cover"))
+}
+
+# Add avoided deforestation project areas as polygons to the map
+m <- m %>%
+  addPolygons(data = all_avoided_def_sf,
+              fillColor = "#76C0EF", # Custom color for visibility
+              color = "#000000", # Border color
+              weight = 1,
+              fillOpacity = 0.5,
+              group = "Avoided Deforestation Projects",
+              popup = ~as.character(filename)) # Assuming 'name' column exists for project names
+
+# Add cookstove location polygons to the map
+m <- m %>%
+  addPolygons(data = all_cookstove_sf, 
+              fillColor = "#FFFF00", # Yellow color for cookstove locations
+              color = "#000000",
+              weight = 1,
+              fillOpacity = 0.7,
+              group = "Cookstove Locations",
+              popup = ~as.character(filename)) # Assuming 'location_name' column exists
+
+
+# Add layers control
+m <- m %>%
+  addLayersControl(overlayGroups = c(paste0(buffer_distances, "m Forest Cover"), "Avoided Deforestation Projects", "Cookstove Locations"),
+                   options = layersControlOptions(collapsed = FALSE))
+
+# Display the map
+m
+
+
+# Example of intersecting forest cover with a specific buffer (e.g., the first buffer)
+# Ensure all spatial objects are in the same CRS before this step
+forest_in_first_buffer <- st_intersection(st_buffer(all_cookstove_sf, dist = buffer_distances[1]), forest_cover_sf)
+
+
+
+# Add forest cover areas as polygons to the map
+m <- m %>%
+  addPolygons(data = forest_cover_sf,
+              fillColor = "#228B22", # Forest green
+              color = "#006400", # Dark green border
+              weight = 1,
+              fillOpacity = 0.5,
+              group = "Forest Cover",
+              popup = ~as.character(name)) # Assuming 'name' column exists for forest names
 
 
 
