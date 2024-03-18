@@ -53,7 +53,7 @@ cookstove_sf_list[[12]] <- st_make_valid(cookstove_sf_list[[12]])
 ## Drop trouble maker ##
 # the fourth row of the eleventh element of redd_sf_list causes the issues.  
 # Dropping it results in a loop that is finished after < 1min on my computer. 
-#redd_sf_list[[1]] <- redd_sf_list[[1]][1:3,]
+avoided_def_list[[1]] <- avoided_def_list[[1]][1:3,]
 ####################################################################
 ##1. Overlapping analysis using loop 
 
@@ -167,6 +167,58 @@ buffer_colors <- c("#FF0000", "#00FF00", "#0000FF") # Colors for each buffer dis
 m <- leaflet() %>%
   addProviderTiles(providers$OpenStreetMap)
 
+# Loop through each buffer distance to create and add buffer polygons to the map
+for (i in seq_along(buffer_distances)) {
+  # Dynamically create buffer for each distance
+  current_buffer <- st_buffer(all_cookstove_sf, dist = buffer_distances[i])
+  
+  # Add the buffer as a polygon layer to the map with a unique color and group
+  m <- m %>%
+    addPolygons(data = current_buffer, 
+                fillColor = "transparent",
+                color = buffer_colors[i],
+                fillOpacity = 0.3,
+                weight = 2,
+                opacity = 0.8,
+                popup = ~paste(buffer_distances[i] / 1000, "km buffer"),
+                group = paste0(buffer_distances[i], " m Buffer"))
+}
+
+# Add avoided deforestation project areas as polygons to the map
+m <- m %>%
+  addPolygons(data = all_avoided_def_sf,
+              fillColor = "#000000", # Fill color for avoided deforestation projects
+              color = "#000000", # Border color for avoided deforestation projects
+              weight = 2,
+              fillOpacity = 0.7, # Adjusted for visibility
+              popup = ~as.character(filename), # Adjust 'filename' to your specific column name if different
+              group = "Avoided Deforestation")
+
+# Add layers control to toggle visibility of each buffer layer and the avoided deforestation layer
+m <- m %>%
+  addLayersControl(overlayGroups = c(paste0(buffer_distances, " m Buffer"), "Avoided Deforestation"),
+                   options = layersControlOptions(collapsed = FALSE))
+
+# Print the map
+m
+
+########################
+#Proximity analysis 
+
+forest_cover_sf <- st_read("D:/Thesis/Forestcover/forestcover/New folder/AfricaForestCoverVectors.shp")
+
+forest_cover_sf <- st_simplify(forest_cover_sf, preserveTopology = TRUE, dTolerance = 0.01)
+
+forest_cover_sf <- st_set_crs(forest_cover_sf, 4326)
+
+
+buffer_distances <- c(5000, 10000, 15000) # Distances in meters
+buffer_colors <- c("#FF0000", "#00FF00", "#0000FF") # Colors for each buffer distance
+
+# Initialize the leaflet map with OpenStreetMap tiles
+m <- leaflet() %>%
+  addProviderTiles(providers$OpenStreetMap)
+
 # Add forest cover areas as polygons to the map
 m <- m %>%
   addPolygons(data = forest_cover_sf,
@@ -192,7 +244,7 @@ for (i in seq_along(buffer_distances)) {
                 weight = 2,
                 opacity = 0.8,
                 popup = ~paste(buffer_distances[i] / 1000, "km buffer"),
-                group = paste0(buffer_distances[i], " m Buffer"))
+                group = paste0(filename, " - ", buffer_distances[i], " m Buffer"))
 }
 
 # Add avoided deforestation project areas as polygons to the map
@@ -235,15 +287,21 @@ simplified_polygons <- rasterToPolygons(simplified_raster, fun=function(x) {x==1
 # Convert raster to polygons
 polygon_layer <- rasterToPolygons(forest_cover, fun=function(x) {x==1}, dissolve=TRUE)
 
-# Convert to sf object
-polygon_sf <- st_as_sf(polygon_layer)
-# Calculate distance from each cookstove project to the nearest forest cover
-all_cookstove_sf$nearest_forest_distance <- st_distance(all_cookstove_sf, forest_cover_sf, by_element=TRUE) %>% apply(1, min)
+library(sf)
+library(dplyr)
 
-# Calculate distance from each avoided deforestation project to the nearest forest cover
-all_avoided_def_sf$nearest_forest_distance <- st_distance(all_avoided_def_sf, forest_cover_sf, by_element=TRUE) %>% apply(1, min)
+# Assuming all_cookstove_sf and forest_cover_sf are already defined spatial feature objects
 
+# Calculate distances from each cookstove project to the nearest forest cover
+distances_to_nearest_forest <- st_distance(all_cookstove_sf, forest_cover_sf)
 
+# Apply min() to each row to find the nearest distance
+all_cookstove_sf$nearest_forest_distance <- apply(distances_to_nearest_forest, 1, min)
+
+# Repeat the process for avoided deforestation projects
+distances_to_nearest_forest_avoided_def <- st_distance(all_avoided_def_sf, forest_cover_sf)
+
+all_avoided_def_sf$nearest_forest_distance <- apply(distances_to_nearest_forest_avoided_def, 1, min)
 
 # Add layers control to include the Forest Cover layer
 m <- m %>%
@@ -254,6 +312,49 @@ m <- m %>%
 m
 
 
+
+##########################
+# Assuming all_cookstove_sf and all_avoided_def_sf are defined sf objects
+buffer_distance_closest <- 5000 # Focus on the closest proximity, 5 km
+
+# Create a buffer around cookstove projects for the closest distance
+closest_buffer <- st_buffer(all_cookstove_sf, dist = buffer_distance_closest)
+
+# Identify avoided deforestation projects that intersect with the closest buffer
+close_proximity_projects <- st_intersection(closest_buffer, all_avoided_def_sf)
+
+# Initialize the leaflet map
+m <- leaflet() %>%
+  addProviderTiles(providers$OpenStreetMap)
+
+# Add only the close proximity avoided deforestation projects to the map
+m <- m %>%
+  addPolygons(data = all_avoided_def_sf,
+              fillColor = "#FF0000", # Adjust color as needed
+              color = "#FF0000",
+              weight = 2,
+              fillOpacity = 0.7,
+              popup = ~as.character(filename), # Adjust 'filename' to your specific column name if different
+              group = "Close Proximity Avoided Deforestation")
+
+# Add a single buffer polygon to illustrate the area considered for close proximity
+m <- m %>%
+  addPolygons(data = closest_buffer, 
+              fillColor = "transparent",
+              color = "#000000",
+              fillOpacity = 0.3,
+              weight = 2,
+              opacity = 0.8,
+              popup = "5 km buffer",
+              group = "5 km Buffer")
+
+# Add layers control to toggle visibility
+m <- m %>%
+  addLayersControl(overlayGroups = c("5 km Buffer", "Close Proximity Avoided Deforestation", "Forest Cover"),
+                   options = layersControlOptions(collapsed = FALSE))
+
+# Print the map
+m
 #######################
 #Forest land cover overlay 
 #############################################
@@ -390,13 +491,6 @@ m
 
 
 #############################
-forest_cover_sf <- st_read("D:/Thesis/Forestcover/forestcover/New folder/AfricaForestCoverVectors.shp")
-
-forest_cover_sf <- st_set_crs(forest_cover_sf, 4326)
-
-
-
-
 
 
 # Proximity analysis setup

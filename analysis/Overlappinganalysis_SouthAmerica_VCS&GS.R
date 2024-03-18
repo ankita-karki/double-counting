@@ -56,10 +56,10 @@ if(length(geometry_collection_indices) > 0) {
 }
 
 # Assuming redd_sf_list is your list and you have identified specific indices but want to drop the first element of the original list
-avoided_def_list[[31]]<- avoided_def_list[[31]][-1,]
-
-elements_to_remove <- c(8,16,21,23)
-avoided_def_list[[40]]<- avoided_def_list[[40]][-elements_to_remove,]
+#avoided_def_list[[31]]<- avoided_def_list[[31]][-1,]
+avoided_def_list[[40]]<- avoided_def_list[[40]][-16,]
+#elements_to_remove <- c(8,16,21,23)
+#avoided_def_list[[40]]<- avoided_def_list[[40]][-elements_to_remove,]
 
 ####################
 ###Loop analysis

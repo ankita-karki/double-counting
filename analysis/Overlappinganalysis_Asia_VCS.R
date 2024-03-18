@@ -681,37 +681,3 @@ st_write(all_redd_sf, "updated_redd_with_distance.gpkg", layer = "REDD_Distance_
 
 
 ########################
-install.packages("xml2")
-library(rgdal) # For handling geospatial data
-library(xml2) # For parsing XML files
-library(sf)
-
-xml_file <- read_xml("D:/Thesis/Forestcover/JRC_GFC2020_V1.xml")
-
-# Find all polygon elements in the XML file
-polygons <- xml_find_all(xml_file, ".//polygon")
-
-# Initialize an empty list to store polygon coordinates
-polygon_coords <- list()
-
-# Loop through each polygon element
-for (polygon in polygons) {
-  # Extract coordinates from the polygon element
-  coords <- xml_attr(xml_find_all(polygon, ".//coordinates"), "points")
-  # Split coordinates into individual points
-  points <- strsplit(coords, " ")
-  # Convert points to a matrix
-  points_matrix <- matrix(unlist(points), ncol = 2, byrow = TRUE)
-  # Convert matrix to a Polygon object
-  polygon_obj <- st_polygon(list(points_matrix))
-  # Add polygon object to the list
-  polygon_coords <- c(polygon_coords, polygon_obj)
-}
-
-# Convert the list of polygon objects to an sf object
-polygons_sf <- st_sf(geometry = st_sfc(polygon_coords))
-
-# Plot the extracted polygons
-plot(polygons_sf)
-
-

@@ -98,7 +98,7 @@ tryCatch({
   all_cookstove_sf <- st_make_valid(all_cookstove_sf) %>% st_simplify(preserveTopology = TRUE)
   all_avoided_def_sf <- st_make_valid(all_avoided_def_sf) %>% st_simplify(preserveTopology = TRUE)
   overlap_sf <- st_intersection(all_cookstove_sf, all_avoided_def_sf)
-})
+}) ###No overlap occurs as the two projects are not located in same area 
 
 ##################################################
 # Plotting the overlap using leaflet
